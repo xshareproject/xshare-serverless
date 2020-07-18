@@ -1,0 +1,24 @@
+{
+  "name": "swish-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "npm run dev --prefix ./server",
+    "frontend": "npm start --prefix ./Swish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkbui/Swish.git"
+  },
+  "author": "Ken Bui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pkbui/Swish/issues"
+  },
+  "homepage": "https://github.com/pkbui/Swish#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0",
+    "uuid": "^8.2.0"
+  }
+}

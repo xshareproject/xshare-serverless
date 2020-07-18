@@ -1,11 +1,13 @@
 const Sequelize = require('sequelize');
 const dbConnector = require("../config/database");
+const {v4: uuidv4} = require('uuid');
 
 const User = dbConnector.define('user', {
     uid: {
         type: Sequelize.UUID,
+        primaryKey: true,
         allowNull: false,
-        primaryKey: true
+        defaultValue: uuidv4()
     },
     fname: {
         type: Sequelize.TEXT,
@@ -13,7 +15,6 @@ const User = dbConnector.define('user', {
     },
     lname: {
         type: Sequelize.TEXT,
-        allowNull: false
     },
     email: {
         type: Sequelize.TEXT,
@@ -25,15 +26,18 @@ const User = dbConnector.define('user', {
     },
     balance: {
         type: Sequelize.NUMBER,
-        allowNull: false   
+        allowNull: false,
+        defaultValue: 0.0   
     },
     createdAt: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: Date.now()    
     },
     updatedAt: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: Date.now()       
     }
 });
 
