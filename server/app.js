@@ -20,6 +20,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(cors());
 app.get('/', (req, res) => res.send("Hello Swish"));
 app.use('/api/users', jsonParser, require('./routes/users'));
+app.use('/api/contacts', jsonParser, require('./routes/contacts'));
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, console.log(`Server started on port ${PORT}`));

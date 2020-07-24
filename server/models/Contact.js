@@ -1,33 +1,34 @@
 const Sequelize = require('sequelize');
 const dbConnector = require("../config/database");
 const {v4: uuidv4} = require('uuid');
+const User = require('../models/User');
 
-const User = dbConnector.define('user', {
-    uid: {
+const Contact = dbConnector.define('contact', {
+    cid: {
         type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
         defaultValue: uuidv4()
     },
-    fname: {
+    contactOwnerId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'uid',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE 
+        }
+    },
+    name: {
         type: Sequelize.TEXT,
         allowNull: false
-    },
-    lname: {
-        type: Sequelize.TEXT,
     },
     email: {
         type: Sequelize.TEXT,
         allowNull: false
     },
-    password: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
-    balance: {
-        type: Sequelize.NUMBER,
-        allowNull: false,
-        defaultValue: 0.0   
+    phoneNumber: {
+        type: Sequelize.TEXT
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -39,6 +40,7 @@ const User = dbConnector.define('user', {
         allowNull: false,
         defaultValue: dbConnector.fn('now')
     }
+
 });
 
-module.exports = User;
+module.exports = Contact;

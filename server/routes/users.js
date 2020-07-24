@@ -64,16 +64,11 @@ router.post('/', (req, res) =>
 //Update user identified by email
 router.put('/email/:email', (req, res) => {
     if(req.body !== null){
-        console.log(req.body);
-        let fname = req.body.fname;
         let email = req.params.email;
-        User.update( { fname }, {
+        User.update( req.body, {
             where: { email }
         })
-        .then((updateResult) => {
-            console.log(updateResult);
-            res.sendStatus(200);
-        })
+        .then(() => res.sendStatus(200))
         .catch((err) => 
         {
             console.log(err);
