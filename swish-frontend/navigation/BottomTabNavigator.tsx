@@ -5,9 +5,15 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+
+import Home from '../screens/Home';
+import Contacts from '../screens/Contacts';
+import Transactions from '../screens/Transactions';
+import Profile from '../screens/Profile';
+
+import TransactionDetails from '../components/TransactionDetails';
+
+import { BottomTabParamList, HomeTabParamList, TransactionsTabParamList, ContactsTabParamList, ProfileTabParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -19,15 +25,29 @@ export default function BottomTabNavigator() {
       initialRouteName="TabOne"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Home"
+        component={HomeTabNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Contacts"
+        component={ContactsTabNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Transactions"
+        component={TransactionsTabNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileTabNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -44,30 +64,63 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const HomeTabStack = createStackNavigator<HomeTabParamList>();
 
-function TabOneNavigator() {
+function HomeTabNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+    <HomeTabStack.Navigator>
+      <HomeTabStack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
       />
-    </TabOneStack.Navigator>
+    </HomeTabStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const ContactsTabStack = createStackNavigator<ContactsTabParamList>();
 
-function TabTwoNavigator() {
+function ContactsTabNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <ContactsTabStack.Navigator>
+      <ContactsTabStack.Screen
+        name="Contact"
+        component={Contacts}
+        options={{ headerShown: false }}
       />
-    </TabTwoStack.Navigator>
+    </ContactsTabStack.Navigator>
+  );
+}
+
+const TransactionsTabStack = createStackNavigator<TransactionsTabParamList>();
+
+function TransactionsTabNavigator() {
+  return (
+    <TransactionsTabStack.Navigator>
+      <TransactionsTabStack.Screen
+        name="Transactions"
+        component={Transactions}
+        options={{ headerShown: false }}
+      />
+      <TransactionsTabStack.Screen
+        name="Details"
+        component={TransactionDetails}
+        options={{ headerShown: false }}
+      />
+    </TransactionsTabStack.Navigator>
+  );
+}
+
+const ProfileTabStack = createStackNavigator<ProfileTabParamList>();
+
+function ProfileTabNavigator() {
+  return (
+    <ProfileTabStack.Navigator>
+      <ProfileTabStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+    </ProfileTabStack.Navigator>
   );
 }
