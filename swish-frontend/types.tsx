@@ -15,20 +15,3 @@ export type TabOneParamList = {
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };
-
-export type HomeTabParamList = {
-  
-};
-
-export type ContactsTabParamList = {
-  
-};
-
-export type TransactionsTabParamList = {
-
-};
-
-
-export type ProfileTabParamList = {
-  
-};

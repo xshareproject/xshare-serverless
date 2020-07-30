@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { Button, StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import TransactionList from '../components/TransactionList';
+import TransactionList from '../components/transactions/TransactionList';
+import { TransactionDetailSchema } from '../components/transactions/TransactionCard';
+import { StackScreenProps } from '@react-navigation/stack';
+import { NavigationProp } from '@react-navigation/native';
 
-//functional component
+//TODO: TransactionProps should be extending from a Props with navigation object
 interface TransactionsProps {
   //user info
 }
@@ -13,13 +16,13 @@ interface TransactionsState {
 }
 
 // class Transactions extends React.Component<TransactionsProps, TransactionsState> {
-  export default class Transactions extends React.Component{
-  constructor(props){
+export default class TransactionsOverviewScreen extends React.Component<TransactionsProps, TransactionsState>{
+  constructor(props : any){
     super(props);
   }
 
-  navigateToDetailCallback = () => {
-    this.props.navigation.navigate('Details');
+  navigateToDetailCallback = (detailScreenProps : TransactionDetailSchema) => {
+    this.props.navigation.navigate('Details', detailScreenProps);
   }
 
   render(){

@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {FlatList} from 'react-native';
-import { Text, View } from './Themed';
+import { Text, View } from '../Themed';
 // import 'bootstrap/dist/css/bootstrap.css';
-import harold from '../assets/images/profile_test.webp';
-import TransactionCard, {TransactionDetailSchema} from '../components/TransactionCard';
-import Transactions from '../screens/Transactions';
+import harold from '../../assets/images/profile_test.webp';
+import TransactionCard, {TransactionDetailSchema} from './TransactionCard';
 
 
 interface TransactionListState {
     transactions : TransactionDetailSchema[]
 }
 
-export interface TransactionListProps {
-    navigationCallback : () => void
+export interface TransactionListProps extends React.ComponentProps<any> {
+    navigationCallback : (detailScreenProps : TransactionDetailSchema) => void
 }
 
 const transactionData = [{
@@ -41,7 +40,7 @@ const transactionData = [{
     "status": "unpaid"
 }];
 
-class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
+export default class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
     constructor(props : TransactionListProps){
         super(props);
         this.state = {
@@ -87,5 +86,3 @@ const styles = StyleSheet.create({
         borderRadius: 10
     }
 });
-
-export default TransactionList;

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-class Home extends React.Component{
+export default class HomeScreen extends React.Component{
     render(){
         return (
             <View style={styles.container}>
@@ -32,4 +32,3 @@ const styles = StyleSheet.create({
     },
   });
 
-export default Home;

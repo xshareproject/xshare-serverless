@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from './Themed';
+import { Text, View } from '../Themed';
 import { StyleSheet, Image } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
@@ -20,12 +20,12 @@ interface TransactionCardState {
 //props need to define navigator
 interface TransactionCardProps {
     transactionDetails : TransactionDetailSchema,
-    navigationCallback : () => void
+    navigationCallback : (detailScreenProps : TransactionDetailSchema) => void
 }
 
 export default function TransactionCard(props : TransactionCardProps){    
     return (
-        <TouchableHighlight onPress={ () => props.navigationCallback() }>
+        <TouchableHighlight onPress={ () => props.navigationCallback(props.transactionDetails) }>
             <View style={styles.card}> 
                 <Image source={props.transactionDetails.image} style={styles.image}></Image>
                 <Text> {props.transactionDetails.name} </Text>
