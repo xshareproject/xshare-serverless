@@ -2,16 +2,7 @@ import * as React from 'react';
 import { Text, View } from '../Themed';
 import { StyleSheet, Image } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-
-
-export interface TransactionDetailSchema {
-    id: string,
-    name: string,
-    amount: number,
-    date: string,
-    image: any,
-    status: string 
-}
+import {TransactionDetailSchema} from '../../schema/Schema';
 
 interface TransactionCardState {
 
