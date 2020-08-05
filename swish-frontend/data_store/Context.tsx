@@ -2,10 +2,9 @@ import * as React from 'react';
 import harold from '../assets/images/profile_test.webp';
 import {TransactionDetailSchema, PaymentStatus} from '../schema/Schema';
 
-
-const transactions : TransactionDetailSchema[] = [
-    //default properties. Should be loaded from backend api on integration
-    //Also might be refactored into using Redux
+//default properties. Should be loaded from backend api on integration?
+//Or refactored into using Redux
+export const transactions : TransactionDetailSchema[] = [
     {
         "id": "122a5aa3-e4aa-4a57-a420-818fed3060f0",
         "name": "User 1",
@@ -38,23 +37,17 @@ const transactions : TransactionDetailSchema[] = [
         "image": harold,
         "status": PaymentStatus.Pending,
         "recurring": false
-    }
+      }
 ];
 
+export const updateTransactions = (transaction : TransactionDetailSchema) => {
+    console.log('Update transaction triggered');
+}
+
 //export default values
-export const TransactionDataContext = React.createContext({
-    transactions: [
-        {
-            "id": "122a5aa3-e4aa-4a57-a420-818fed3060f0",
-            "name": "User 1",
-            "amount": 12.20,
-            "description": "SkipTheDishes",
-            "createdDate": "July 20th",
-            "paymentDate": "August 20th",
-            "image": harold,
-            "status": PaymentStatus.Pending,
-            "recurring": false
-        },
-    ],
-    updateTransaction: (transaction : TransactionDetailSchema, transactionId : string) => {},
+export const TransactionsContext = React.createContext({
+    transactions,
+    updateTransactions: (transaction : TransactionDetailSchema) => {},
 });
+
+

@@ -1,34 +1,52 @@
 import * as React from 'react';
 import { StyleSheet, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { TransactionDetailSchema } from '../components/transactions/TransactionCard';
+import { TransactionDetailSchema, PaymentStatus } from '../schema/Schema';
 import { TextInput } from 'react-native-gesture-handler';
+import {TransactionsContext, transactions, updateTransactions} from '../data_store/Context';
 
 interface TransactionDetailsState {
-    transactionDetails : TransactionDetailSchema;
+    transaction: TransactionDetailSchema,
+}
+
+interface TransactionDetailsProps {
 }
 
 
-export default class TransactionDetailsScreen extends React.Component<{navigator : any, route : any}, TransactionDetailsState>{
-    constructor (props : any){
+export default class TransactionDetailsScreen extends React.Component<TransactionDetailsProps, TransactionDetailsState>{
+    constructor (props: any){
         super(props);
         this.state = {
-            transactionDetails: this.props.route.params
-        };
+            transaction : this.props.route.params,
+        }
+    };
+
+    updateName = (name : string) => {
+        let transaction = {...this.state.transaction};
+        transaction.name = name;
+        this.setState({
+            transaction
+        });
+        console.log("Name updated")
     }
+
     render(){
         return (
-            <React.Fragment>
-                {/* <View style={styles.topBar}>
-                </View> */}
-                <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'} style={styles.container}>
-                    {/* <Image source={this.state.transactionDetails.image}></Image> */}
-                    <TextInput style={{backgroundColor: "#ccccdd"}}> {this.state.transactionDetails.name} </TextInput>
-                    <TextInput style={{borderWidth: 1, borderColor: '#12de34'}}> {this.state.transactionDetails.amount} </TextInput>
-                    <TextInput> {this.state.transactionDetails.date} </TextInput>
-                    <TextInput> {this.state.transactionDetails.status} </TextInput>
-                </KeyboardAvoidingView>
-            </React.Fragment>
+            <TransactionsContext.Consumer>
+            {({transactions, updateTransactions}) => (
+                <React.Fragment>
+                    {/* <View style={styles.topBar}>
+                    </View> */}
+                    <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'position' : 'position'} style={styles.container}>
+                        {/* <Image source={this.state.transactionDetails.image}></Image> */}
+                        <TextInput style={{backgroundColor: "#ccccdd"}} onSubmitEditing={(event) => this.updateName(event.nativeEvent.text)}>{this.state.transaction.name} </TextInput>
+                        <TextInput style={{borderWidth: 1, borderColor: '#12de34'}}> {this.state.transaction.amount} </TextInput>
+                        <TextInput> {this.state.transaction.createdDate} </TextInput>
+                        <TextInput> {PaymentStatus[this.state.transaction.status]} </TextInput>
+                    </KeyboardAvoidingView>
+                </React.Fragment>
+            )}
+            </TransactionsContext.Consumer>
         );
     }
 }
@@ -42,3 +60,4 @@ const styles = StyleSheet.create({
         flex: 1 ,
     }
 });
+

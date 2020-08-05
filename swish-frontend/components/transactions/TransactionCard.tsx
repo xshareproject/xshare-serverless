@@ -2,27 +2,25 @@ import * as React from 'react';
 import { Text, View } from '../Themed';
 import { StyleSheet, Image } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import {TransactionDetailSchema} from '../../schema/Schema';
-
-interface TransactionCardState {
-
-}
+import {TransactionDetailSchema, PaymentStatus} from '../../schema/Schema';
+import { TransactionsContext } from '../../data_store/Context';
 
 //props need to define navigator
 interface TransactionCardProps {
-    transactionDetails : TransactionDetailSchema,
-    navigationCallback : (detailScreenProps : TransactionDetailSchema) => void
+    transaction: TransactionDetailSchema,
+    navigationCallback: (transaction : TransactionDetailSchema) => void 
 }
 
-export default function TransactionCard(props : TransactionCardProps){    
+export default function TransactionCard(props: TransactionCardProps){   
+    // console.log("Transaction Card: ", props.transaction) 
     return (
-        <TouchableHighlight onPress={ () => props.navigationCallback(props.transactionDetails) }>
+        <TouchableHighlight onPress={ () => props.navigationCallback(props.transaction)}> 
             <View style={styles.card}> 
-                <Image source={props.transactionDetails.image} style={styles.image}></Image>
-                <Text> {props.transactionDetails.name} </Text>
-                <Text> {props.transactionDetails.amount} </Text>
-                <Text> {props.transactionDetails.date} </Text>
-                <Text> {props.transactionDetails.status} </Text>
+                <Image source={props.transaction.image} style={styles.image}></Image>
+                <Text> {props.transaction.name} </Text>
+                <Text> {props.transaction.amount} </Text>
+                <Text> {props.transaction.createdDate} </Text>
+                <Text> {PaymentStatus[props.transaction.status]} </Text>
             </View>
         </TouchableHighlight>
     );

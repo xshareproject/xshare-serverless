@@ -2,17 +2,17 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {FlatList} from 'react-native';
 import { Text, View } from '../Themed';
-// import 'bootstrap/dist/css/bootstrap.css';
 import TransactionCard from './TransactionCard';
 import {TransactionDetailSchema} from '../../schema/Schema';
-import { TransactionDataContext } from '../../data_store/Context';
+
 
 interface TransactionListState {
     transactions : TransactionDetailSchema[]
 }
 
-export interface TransactionListProps extends React.ComponentProps<any> {
-    navigationCallback : (detailScreenProps : TransactionDetailSchema) => void,
+export interface TransactionListProps extends React.ComponentProps<any>{
+    transactions : TransactionDetailSchema[],
+    navigationCallback : (transaction : TransactionDetailSchema) => void
 }
 
 export default class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
@@ -26,7 +26,7 @@ export default class TransactionList extends React.Component<TransactionListProp
     //load in transaction data on component creation
     componentDidMount(){
         this.setState({
-            transactions: this.context.transactions
+            transactions: this.props.transactions
         });
     }
 
@@ -35,15 +35,15 @@ export default class TransactionList extends React.Component<TransactionListProp
     {
         return(
             <TransactionCard 
-                transactionDetails={item}
-                navigationCallback={this.props.navigationCallback}
+                transaction={item}
+                navigationCallback = {this.props.navigationCallback}
             />
         );
     }
 
     //rendering function
     render(){
-        console.log("Transaction List", this.state.transactions);
+        // console.log('Transaction List ', this.state.transactions[0]);
         return (
             <View style={styles.container}>
                 <FlatList 
@@ -55,8 +55,6 @@ export default class TransactionList extends React.Component<TransactionListProp
         );
     }
 }
-
-TransactionList.contextType = TransactionDataContext;
  
 const styles = StyleSheet.create({
     container: {

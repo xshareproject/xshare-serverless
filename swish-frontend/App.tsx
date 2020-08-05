@@ -5,19 +5,26 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import {TransactionDataContext} from './data_store/Context';
+import {TransactionsContext, transactions, updateTransactions} from './data_store/Context';
 
 export default function App(){
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   if (!isLoadingComplete) {
     return null;
-  } else {
+  } 
+  else {
+    const transactionContext = {
+      transactions,
+      updateTransactions
+    };
     return (
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
+       <TransactionsContext.Provider value={transactionContext}>
+          <SafeAreaProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaProvider>
+       </TransactionsContext.Provider>
     );
   }
 }
