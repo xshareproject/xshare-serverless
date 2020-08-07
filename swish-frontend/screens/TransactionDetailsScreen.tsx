@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { StyleSheet, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Image, KeyboardAvoidingView, BackHandler, Platform } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { TransactionDetailSchema, PaymentStatus } from '../schema/Schema';
 import { TextInput } from 'react-native-gesture-handler';
-import {TransactionsContext, transactions, updateTransactions} from '../data_store/Context';
+import {TransactionsContext, TransactionSchema, PaymentStatus} from '../data_store/Transactions';
+import { NavigationProp, Route } from '@react-navigation/native';
 
 interface TransactionDetailsState {
-    transaction: TransactionDetailSchema,
+    transaction: TransactionSchema,
 }
 
 interface TransactionDetailsProps {
+    navigation : NavigationProp<any>,
 }
 
 
@@ -21,26 +22,17 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         }
     };
 
-    updateName = (name : string) => {
-        let transaction = {...this.state.transaction};
-        transaction.name = name;
-        this.setState({
-            transaction
-        });
-        console.log("Name updated")
-    }
-
     render(){
         return (
             <TransactionsContext.Consumer>
-            {({transactions, updateTransactions}) => (
+            {(transactions) => (
                 <React.Fragment>
                     {/* <View style={styles.topBar}>
                     </View> */}
-                    <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'position' : 'position'} style={styles.container}>
+                    <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'} style={styles.container}>
                         {/* <Image source={this.state.transactionDetails.image}></Image> */}
-                        <TextInput style={{backgroundColor: "#ccccdd"}} onSubmitEditing={(event) => this.updateName(event.nativeEvent.text)}>{this.state.transaction.name} </TextInput>
-                        <TextInput style={{borderWidth: 1, borderColor: '#12de34'}}> {this.state.transaction.amount} </TextInput>
+                        <TextInput style={{backgroundColor: "#ccccdd"}} onSubmitEditing={(event) => transactions.updateTransaction(this.state.transaction.id, event.nativeEvent.text, "name")}>{this.state.transaction.name} </TextInput>
+                        <TextInput style={{borderWidth: 1, borderColor: '#12de34'}} onSubmitEditing={(event) => transactions.updateTransaction(this.state.transaction.id, event.nativeEvent.text, "amount")}> {this.state.transaction.amount} </TextInput>
                         <TextInput> {this.state.transaction.createdDate} </TextInput>
                         <TextInput> {PaymentStatus[this.state.transaction.status]} </TextInput>
                     </KeyboardAvoidingView>

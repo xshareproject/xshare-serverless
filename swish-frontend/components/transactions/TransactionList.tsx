@@ -3,16 +3,16 @@ import { StyleSheet } from 'react-native';
 import {FlatList} from 'react-native';
 import { Text, View } from '../Themed';
 import TransactionCard from './TransactionCard';
-import {TransactionDetailSchema} from '../../schema/Schema';
+import {TransactionSchema} from '../../data_store/Transactions';
 
 
 interface TransactionListState {
-    transactions : TransactionDetailSchema[]
+    transactions : TransactionSchema[]
 }
 
 export interface TransactionListProps extends React.ComponentProps<any>{
-    transactions : TransactionDetailSchema[],
-    navigationCallback : (transaction : TransactionDetailSchema) => void
+    transactions : TransactionSchema[],
+    navigationCallback : (transaction : TransactionSchema) => void
 }
 
 export default class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
@@ -41,9 +41,7 @@ export default class TransactionList extends React.Component<TransactionListProp
         );
     }
 
-    //rendering function
     render(){
-        // console.log('Transaction List ', this.state.transactions[0]);
         return (
             <View style={styles.container}>
                 <FlatList 

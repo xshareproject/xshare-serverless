@@ -2,13 +2,12 @@ import * as React from 'react';
 import { Text, View } from '../Themed';
 import { StyleSheet, Image } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import {TransactionDetailSchema, PaymentStatus} from '../../schema/Schema';
-import { TransactionsContext } from '../../data_store/Context';
+import { TransactionsContext, TransactionSchema, PaymentStatus } from '../../data_store/Transactions';
 
 //props need to define navigator
 interface TransactionCardProps {
-    transaction: TransactionDetailSchema,
-    navigationCallback: (transaction : TransactionDetailSchema) => void 
+    transaction: TransactionSchema,
+    navigationCallback: (transaction : TransactionSchema) => void 
 }
 
 export default function TransactionCard(props: TransactionCardProps){   

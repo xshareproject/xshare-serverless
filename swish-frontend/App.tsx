@@ -1,11 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import {TransactionsContext, transactions, updateTransactions} from './data_store/Context';
+import {TransactionsContext, Transactions, TransactionSchema} from './data_store/Transactions';
 
 export default function App(){
   const isLoadingComplete = useCachedResources();
@@ -14,12 +13,9 @@ export default function App(){
     return null;
   } 
   else {
-    const transactionContext = {
-      transactions,
-      updateTransactions
-    };
-    return (
-       <TransactionsContext.Provider value={transactionContext}>
+    var transactions = new Transactions();
+    return (  
+       <TransactionsContext.Provider value={transactions}>
           <SafeAreaProvider>
             <Navigation colorScheme={colorScheme} />
             <StatusBar />

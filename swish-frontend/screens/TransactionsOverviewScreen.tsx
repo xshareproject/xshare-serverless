@@ -2,13 +2,14 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import TransactionList from '../components/transactions/TransactionList';
-import {TransactionDetailSchema} from '../schema/Schema';
 import harold from '../assets/images/profile_test.webp';
-import { TransactionsContext} from '../data_store/Context';
+import { TransactionsContext, TransactionSchema} from '../data_store/Transactions';
+import { NavigationProp } from '@react-navigation/native';
 
 
 //TODO: TransactionProps should be extending from a Props with navigation object
 interface TransactionsOverviewProps {
+  navigation : NavigationProp<any>
 }
 
 interface TransactionsOverviewState {
@@ -19,10 +20,17 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     super(props);
   }  
 
+  componentDidMount(){
+    this.props.navigation.addListener('focus', () => {
+      console.log("Screen focused Mounted");
+      this.forceUpdate();
+    });
+  }
+
   render(){
     return (
       <TransactionsContext.Consumer>
-        {({transactions, updateTransactions}) => (
+        {(transactions) => (
           <View style={styles.container}>
             <View style = {styles.topBar}>
               <Text style={styles.welcomeText}>
@@ -33,7 +41,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
               <Text style={{fontSize: 50}}>$150.00</Text> 
             </View>
             <View style = {styles.transactionView}>
-              <TransactionList style={styles.transactionList} transactions={transactions} navigationCallback={this.navigateToDetailCallback}></TransactionList>
+              <TransactionList style={styles.transactionList} transactions={transactions.transactions} navigationCallback={this.navigateToDetailCallback}></TransactionList>
             </View>
           </View> 
         )}
@@ -41,7 +49,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     );
   }
 
-  navigateToDetailCallback = (transaction : TransactionDetailSchema) => {
+  navigateToDetailCallback = (transaction : TransactionSchema) => {
     this.props.navigation.navigate('Details', transaction);
   }
 }

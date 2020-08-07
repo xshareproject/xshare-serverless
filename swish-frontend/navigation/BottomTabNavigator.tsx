@@ -100,7 +100,7 @@ function TransactionTabNavigation() {
   return (
     <TransactionsStackNavigator.Navigator>
       <TransactionsStackNavigator.Screen
-        name="Transactions"
+        name="Overview"
         component={TransactionsOverviewScreen}
         options={{ headerShown: false }}
       />
