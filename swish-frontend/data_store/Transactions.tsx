@@ -68,15 +68,15 @@ export class Transactions {
         return this._transactions;
     }
 
-    public updateTransactions = (transaction : TransactionSchema) => {
+    public updateTransaction = (transaction : TransactionSchema) => {
         let index = this._transactions.findIndex(element => element.id === transaction.id);
         this._transactions[index] = transaction;
         console.log("Updated transaction", this._transactions[index]);
     }
 
-    public updateTransaction = (id: string, name: string, propertyName: string) => {
+    public updateTransactionByProperty = (id: string, propertyName: string, value: any) => {
         let index = this._transactions.findIndex(element => element.id === id);
-        this._transactions[index][propertyName] = name; 
+        this._transactions[index][propertyName] = value; 
         console.log("Updated transaction", this._transactions[index]);
     }
 }
