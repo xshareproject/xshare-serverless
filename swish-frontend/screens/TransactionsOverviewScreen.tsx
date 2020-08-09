@@ -22,7 +22,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
 
   componentDidMount(){
     this.props.navigation.addListener('focus', () => {
-      console.log("Screen focused Mounted");
+      console.log("Overview Screen Mounted");
       this.forceUpdate();
     });
   }

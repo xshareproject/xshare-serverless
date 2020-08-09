@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Image, KeyboardAvoidingView, BackHandler, Platform, Route } from 'react-native';
+import { StyleSheet, Image, KeyboardAvoidingView, Button, Platform, Route } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
-import {Picker} from '@react-native-community/picker';
 import {TransactionsContext, TransactionSchema, PaymentStatus, Transactions} from '../data_store/Transactions';
 import { NavigationProp} from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
 
 interface TransactionDetailsState {
     currentTransaction: TransactionSchema,
@@ -21,6 +21,16 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         this.state = {
             currentTransaction : this.props.route.params,
         }
+        
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                <Button              
+                    onPress={() => alert('This is a button!')}
+                    title=""
+                    color="#61daaa"
+                />
+            )
+        })
     };
 
     render(){
@@ -58,39 +68,67 @@ interface TextInputWithLabelProps{
 
 function FieldInputWithLabel(props : TextInputWithLabelProps){
     var defaultValue = props.currentTransaction[props.propertyName];
+
     switch (props.propertyName){
         case "status":
-            defaultValue = PaymentStatus[props.currentTransaction[props.propertyName]];
+            console.log('Props status: ', props.currentTransaction.status);
             return(
                 <View style={styles.inputContainer}>
                     <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
-                    <Picker
-                     style={{paddingLeft: 200}}
-                    // selectedValue={PaymentStatus[props.currentTransaction.status]}  
-                    onValueChange={(itemValue, itemIndex) => {
-                        console.log("Value", itemValue);
-                        props.transactions.updateTransactionByProperty(
-                            props.currentTransaction.id,
-                            props.propertyName,
-                            itemValue
-                        );
-                    }}>
-                        <Picker.Item label="Pending" value={PaymentStatus.Pending}></Picker.Item>
-                        <Picker.Item label="Unpaid" value={PaymentStatus.Unpaid}></Picker.Item>
-                        <Picker.Item label="Paid" value={PaymentStatus.Paid}></Picker.Item>
-                    </Picker>
-                </View>
+                    <RNPickerSelect
+                    onValueChange={(value) => {
+                        console.log("New value: ", value);
+                        if(value !== null){
+                            props.transactions.updateTransactionByProperty(
+                                props.currentTransaction.id,
+                                props.propertyName,
+                                value
+                            );
+                        }
 
+                    }}
+                    style={pickerStyle}
+                    items={[
+                        {label: 'Pending', value: PaymentStatus.Pending},
+                        {label: 'Unpaid', value: PaymentStatus.Unpaid},
+                        {label: 'Paid', value: PaymentStatus.Paid}
+                    ]}
+                    />
+                </View>
             );
         case "recurring": 
-            defaultValue = props.currentTransaction[props.propertyName] ? "Yes" : "No"
+            return(
+                <View style={styles.inputContainer}>
+                    <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
+                    <RNPickerSelect
+                    onValueChange={(value) => {
+                        console.log("New value Recurring: ", value);
+                        if(value !== null){
+                            props.transactions.updateTransactionByProperty(
+                                props.currentTransaction.id,
+                                props.propertyName,
+                                value
+                            );
+                        }
+
+                    }}
+                    style={pickerStyle}
+                    items={[
+                        {label: 'No', value: false},
+                        {label: 'Yes', value: true}
+                    ]}
+                    />
+                </View>
+            );
+
+        default:
+            return (
+                <View style={styles.inputContainer}>
+                    <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
+                    <TextInput style={styles.inputField} onSubmitEditing={(event) => props.transactions.updateTransactionByProperty(props.currentTransaction.id, props.propertyName, event.nativeEvent.text)}>{defaultValue}</TextInput>
+                </View>
+            );
     }
-    return (
-        <View style={styles.inputContainer}>
-            <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
-            <TextInput style={styles.inputField} onSubmitEditing={(event) => props.transactions.updateTransactionByProperty(props.currentTransaction.id, props.propertyName, event.nativeEvent.text)}>{defaultValue}</TextInput>
-        </View>
-    );
 }
 
 
@@ -104,7 +142,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flexDirection: "row",
-        paddingVertical: 20,
+        paddingVertical: 15,
         borderTopWidth: 1,
     },
     inputField: {
@@ -113,4 +151,17 @@ const styles = StyleSheet.create({
         flex: 1
     },
 });
+
+const pickerStyle = StyleSheet.create({
+    inputAndroid: {
+        paddingLeft: 100,
+        borderColor: "#61daaa",
+        width: 200
+    },
+    inputIOS: {
+        paddingLeft: 100,
+        borderColor: "#61daaa",
+        width: 200
+    }
+})
 

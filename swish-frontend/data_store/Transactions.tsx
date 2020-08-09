@@ -77,6 +77,7 @@ export class Transactions {
     public updateTransactionByProperty = (id: string, propertyName: string, value: any) => {
         let index = this._transactions.findIndex(element => element.id === id);
         this._transactions[index][propertyName] = value; 
+        console.log('Property NAMEEEEEEEEEEEEEEEEEE', propertyName);
         console.log("Updated transaction", this._transactions[index]);
     }
 }
