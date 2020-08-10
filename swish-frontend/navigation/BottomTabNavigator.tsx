@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -21,20 +22,30 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Transactions"
+      initialRouteName="Home"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
         name="Home"
         component={HomeTabNavigation}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='home' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
         }}
       />
       <BottomTab.Screen
         name="Contacts"
         component={ContactTabNavigation}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='contacts' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
         }}
       />
       <BottomTab.Screen
@@ -42,7 +53,12 @@ export default function BottomTabNavigator() {
         component={TransactionTabNavigation}
         options = { 
           ({route}) => ({
-          tabBarIcon: (({ color }) => <TabBarIcon name="ios-code" color={color} />),
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='paper-plane' 
+          type='fontisto'
+          size= {20}
+          color={color}/>,
           tabBarVisible: getTabBarVisibility(route)
           })
         }
@@ -50,8 +66,13 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Profile"
         component={ProfileTabNavigation}
-        options={{
-          tabBarIcon: (({ color }) => <TabBarIcon name="ios-code" color={color} />),
+        options = {{
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='profile' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
         }}
       />
     </BottomTab.Navigator>

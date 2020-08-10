@@ -69,8 +69,6 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         });
 
         return (
-            // <TransactionsContext.Consumer>
-            // {(transactions) => (
                 <React.Fragment>
                     <View style={styles.topBar}>
                         <Text style={{fontSize: 20, textAlignVertical: "center"}}>Your transaction with </Text>
@@ -78,8 +76,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                         source={this.state.currentTransaction.image}
                         size="medium"
                         avatarStyle={{paddingLeft: 10}}
-                        containerStyle={{marginTop: 25}}
-                        ></Avatar>
+                        containerStyle={{marginTop: 25}} />
                     </View>
                     <ScrollView style={styles.container}>
                         <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'}>
@@ -93,8 +90,6 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </React.Fragment>
-            // )}
-            // </TransactionsContext.Consumer>}
         );
     }
 }
@@ -159,10 +154,12 @@ function FieldInputWithLabel(props : TextInputWithLabelProps){
 
         default:
             var defaultValue = props.currentTransaction[props.propertyName];
+            var label : string = props.label + ": ";
+            var styling = props.editable ? styles.inputFieldEditable : styles.inputField;
             return (
                 <View style={styles.inputContainer}>
-                    <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
-                    <TextInput style={props.editable ? styles.inputFieldEditable : styles.inputField} 
+                    <Text style={{textAlignVertical: "center"}}>{label}</Text>
+                    <TextInput style={styling} 
                     onChangeText={(text) => 
                         props.updateEditedTransaction(props.propertyName, text)}
                     editable={props.editable}>
