@@ -7,7 +7,8 @@ import {TransactionSchema} from '../../data_store/Transactions';
 
 
 interface TransactionListState {
-    transactions : TransactionSchema[]
+    transactions : TransactionSchema[],
+    
 }
 
 export interface TransactionListProps extends React.ComponentProps<any>{

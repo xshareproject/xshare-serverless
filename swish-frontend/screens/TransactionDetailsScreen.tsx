@@ -3,7 +3,8 @@ import { StyleSheet, Image, KeyboardAvoidingView, Platform, Route } from 'react-
 import { Button, Icon, Avatar } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
-import {TransactionsContext, TransactionSchema, PaymentStatus, Transactions} from '../data_store/Transactions';
+import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
+import { PaymentStatus } from "../data_store/Contacts";
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';

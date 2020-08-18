@@ -70,7 +70,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => 
           <Icon 
           name='profile' 
-          type='ant-design'
+          type='a'
           size= {20}
           color={color}/>
         }}

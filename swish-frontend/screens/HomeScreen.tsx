@@ -1,15 +1,49 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import EditScreenInfo from '../components/EditScreenInfo';
+import { StyleSheet} from 'react-native';
 import { Text, View } from '../components/Themed';
+import { Button, Icon, Overlay } from 'react-native-elements';
+import NewTransaction from '../components/transactions/NewTransaction';
 
-export default class HomeScreen extends React.Component{
+interface HomeScreenState {
+  transactionViewVisible: boolean
+}
+interface HomeScreenProps {
+
+}
+
+export default class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState>{
+    constructor(props){
+      super(props);
+      this.state = {
+        transactionViewVisible: false
+      }
+    }
+
+    toggleNewTransaction(){
+      this.setState({
+        transactionViewVisible: !this.state.transactionViewVisible    
+      });   
+    }
+    
     render(){
+        console.log('Transaction Visible', this.state.transactionViewVisible);
         return (
             <View style={styles.container}>
-              <Text style={styles.title}>Home</Text>
-              <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-              <EditScreenInfo path="/screens/Home.tsx" />
+              <Button
+              icon={
+                <Icon
+                  name='plus'
+                  type='entypo'
+                  size={40}
+                  color="black"
+                />
+              }
+              type="clear"
+              onPress={() => this.toggleNewTransaction()}
+              />
+              <Overlay isVisible={this.state.transactionViewVisible} onBackdropPress={() => this.toggleNewTransaction()}>
+                <NewTransaction></NewTransaction>
+              </Overlay>
             </View>
         );
     }
@@ -21,14 +55,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    separator: {
-      marginVertical: 30,
-      height: 1,
-      width: '80%',
-    },
-  });
+
+});
 

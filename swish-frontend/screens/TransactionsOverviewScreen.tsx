@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import TransactionList from '../components/transactions/TransactionList';
-import harold from '../assets/images/profile_test.webp';
 import { TransactionsContext, TransactionSchema} from '../data_store/Transactions';
 import { NavigationProp } from '@react-navigation/native';
 
