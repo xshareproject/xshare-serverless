@@ -3,13 +3,13 @@ import { Text, View } from '../Themed';
 import { StyleSheet, Image } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { TransactionSchema } from '../../data_store/Transactions';
-import { PaymentStatus, Contacts, ContactSchema } from "../../data_store/Contacts";
+import { PaymentStatus, ContactSchema, TransactionContactPair } from "../../data_store/Contacts";
 import { Avatar } from 'react-native-elements';
 import {ContactsContext} from '../../data_store/Contacts'
 
 interface TransactionCardProps {
     transaction: TransactionSchema,
-    navigationCallback: (transaction : TransactionSchema) => void 
+    navigationCallback: (transaction: TransactionSchema) => void 
 }
 
 export default function TransactionCard(props: TransactionCardProps){   
@@ -19,22 +19,21 @@ export default function TransactionCard(props: TransactionCardProps){
     //however as void[] is not comparable to ContactSchema[], it requires casting to unknown
     //TODO: Refactoring
     const contactListVoid = contactContext.getContactsByTransactions(props.transaction.id);
-    const contactListByTransaction = contactListVoid as unknown as ContactSchema[];
+    const contactList = contactListVoid as unknown as ContactSchema[];
 
-    let transactionContactName : string = contactListByTransaction[0].name;
-    if (contactListByTransaction.length > 1){
-        transactionContactName =  contactListByTransaction[0].name + " & co";
+    let transactionContactName : string = contactList[0].name;
+    if (contactList.length > 1){
+        transactionContactName =  contactList[0].name + " & co";
     }
 
     return (
         <TouchableHighlight onPress={ () => props.navigationCallback(props.transaction)}> 
             <React.Fragment>
-                {/* <View></View> */}
                 <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
                 <View style={styles.card}> 
                     <Avatar rounded
                     size="medium"
-                    source={contactListByTransaction[0].image}
+                    source={contactList[0].image}
                     containerStyle={styles.avatar}
                     />
                     <View style={{flexDirection: 'column', flex: 0.4}}>

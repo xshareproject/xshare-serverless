@@ -4,14 +4,17 @@ import { Button, Icon, Avatar } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
-import { PaymentStatus } from "../data_store/Contacts";
+import { PaymentStatus, ContactSchema, TransactionContactPair } from "../data_store/Contacts";
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
+import { EditableContactList } from '../components/EditableContactList';
 
 interface TransactionDetailsState {
     currentTransaction: TransactionSchema,
     editedTransaction: TransactionSchema,
+    transactionContactList: TransactionContactPair[],
+    editedTransactionContactList: TransactionContactPair[],
     editable: boolean
 }
 
@@ -26,6 +29,8 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         this.state = {
             currentTransaction : this.props.route.params,
             editedTransaction: this.props.route.params,
+            transactionContactList: [],
+            editedTransactionContactList: [],
             editable: false
         }
     };
@@ -47,7 +52,11 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                 }        
             });    
     }
-    
+
+    updateTransactionContact = () => {
+
+    }
+
     render() {
         this.props.navigation.setOptions({
             headerRight: () => (
@@ -71,17 +80,18 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
 
         return (
                 <React.Fragment>
-                    <View style={styles.topBar}>
+                    {/* <View style={styles.topBar}>
                         <Text style={{fontSize: 20, textAlignVertical: "center"}}>Your transaction with </Text>
                         <Avatar rounded
                         source={this.state.currentTransaction.image}
                         size="medium"
                         avatarStyle={{paddingLeft: 10}}
                         containerStyle={{marginTop: 25}} />
-                    </View>
+                    </View> */}
                     <ScrollView style={styles.container}>
                         <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'}>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="name" label="Lender" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction} />
+                            <EditableContactList contactList={[]} editable={this.state.editable} onSubmitCallback={this.updateTransactionContact}></EditableContactList>
+                            {/* <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="name" label="Lender" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction} /> */}
                             <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="description" label="Description" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
                             <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="amount" label="Amount" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
                             <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="createdDate" label="Created On" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>

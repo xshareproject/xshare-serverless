@@ -69,8 +69,8 @@ export default function BottomTabNavigator() {
         options = {{
           tabBarIcon: ({ color }) => 
           <Icon 
-          name='profile' 
-          type='a'
+          name='user' 
+          type='ant-design'
           size= {20}
           color={color}/>
         }}

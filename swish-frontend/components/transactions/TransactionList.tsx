@@ -4,6 +4,7 @@ import {FlatList} from 'react-native';
 import { Text, View } from '../Themed';
 import TransactionCard from './TransactionCard';
 import {TransactionSchema} from '../../data_store/Transactions';
+import { TransactionContactPair } from '../../data_store/Contacts';
 
 
 interface TransactionListState {

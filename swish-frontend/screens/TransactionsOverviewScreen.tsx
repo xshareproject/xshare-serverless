@@ -4,6 +4,7 @@ import { Text, View } from '../components/Themed';
 import TransactionList from '../components/transactions/TransactionList';
 import { TransactionsContext, TransactionSchema} from '../data_store/Transactions';
 import { NavigationProp } from '@react-navigation/native';
+import { TransactionContactPair } from '../data_store/Contacts';
 
 
 //TODO: TransactionProps should be extending from a Props with navigation object

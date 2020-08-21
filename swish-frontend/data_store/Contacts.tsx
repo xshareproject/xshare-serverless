@@ -12,11 +12,12 @@ export interface ContactSchema {
     image: any,     
 }
 
-interface ContactsByTransaction {
+export interface TransactionContactPair {
     id: string,
     transactionId: string,
     contactId: string,
-    paymentStatus: PaymentStatus
+    paymentStatus: PaymentStatus,
+    amountOwned: number,
 }
 
 export enum PaymentStatus {
@@ -55,40 +56,44 @@ const contactsDefault : ContactSchema[] = [
     }
 ]
 
-const contactsByTransactionsDefault : ContactsByTransaction[] = [
+const contactsByTransactionsDefault : TransactionContactPair[] = [
     {
         id: "88d9966b-751c-4bb5-af3f-5e5c493d9eae",
         transactionId: "122a5aa3-e4aa-4a57-a420-818fed3060f0",
         contactId: "1",
         paymentStatus: PaymentStatus.Unpaid,
+        amountOwned: 12.20
     },
     {
         id: "88d9966b-751c-4bb5-af3f-5e5c493d9eab",
         transactionId: "ef0a0809-e563-49eb-a1ac-303a404d83cc",
         contactId: "2",
         paymentStatus: PaymentStatus.Pending,
+        amountOwned: 22.65,
     },
     {
         id: "88d9966b-751c-4bb5-af3f-5e5c493d9eac",
         transactionId: "ef0a0809-e563-49eb-a1ac-303a404d83cc",
         contactId: "3",
         paymentStatus: PaymentStatus.Pending,
+        amountOwned: 22.65,
     },
     {
         id: "88d9966b-751c-4bb5-af3f-5e5c493d9eff",
         transactionId: "8558845a-919f-4487-a5e4-19353ab944b4",
         contactId: "3",
         paymentStatus: PaymentStatus.Unpaid,
+        amountOwned: 20.00,
     }
 ]
 
 export class Contacts {
     private _contacts : ContactSchema[];
-    private _contactsByTransaction : ContactsByTransaction[];
+    private contactTransactionPairs : TransactionContactPair[];
 
     public constructor(){
         this._contacts = contactsDefault;
-        this._contactsByTransaction = contactsByTransactionsDefault;
+        this.contactTransactionPairs = contactsByTransactionsDefault;
     }
 
     public get contacts(){
@@ -99,40 +104,48 @@ export class Contacts {
         return this._contacts.find((contact) => {return contact.id == id});
     }
 
+    public getContactByName(name: string){
+        return this.contacts.filter((contact) => {return contact.name.toLowerCase().includes(name.toLowerCase())});
+    }
+
     public getContactsByTransactions(transactionId : string){
-        let contactsByTransactions : ContactsByTransaction[] = this._contactsByTransaction.filter((contactItem) => {return contactItem.transactionId === transactionId });
+        let contactsByTransactions : TransactionContactPair[] = this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
         let contactList = contactsByTransactions.map((contactsByTransaction) => {return this.getContactsById(contactsByTransaction.contactId);})
         // console.log("ContactByTransaction: ", contactsByTransactions);
         // console.log("ContactList: ", contactList); 
         return contactList;
     }
 
+    public getTransactionContactPair(transactionId: string){
+        return this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
+    }
+
     public deleteContactsByTransactions(transactionId : string){
-        let filteredContacts : ContactsByTransaction[] = this._contactsByTransaction.filter((contactItem) => {return contactItem.transactionId !== transactionId});
-        this._contactsByTransaction = filteredContacts;
+        let filteredContacts : TransactionContactPair[] = this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId !== transactionId});
+        this.contactTransactionPairs = filteredContacts;
     }
 
     public deleteContactsByTransactionsSingle(transactionId : string, contactId: string){
-        let toBeRemoveContactIndex = this._contactsByTransaction.findIndex(contactItem => 
+        let toBeRemoveContactIndex = this.contactTransactionPairs.findIndex(contactItem => 
             contactItem.contactId === contactId && contactItem.transactionId === transactionId);
-        this._contactsByTransaction.splice(toBeRemoveContactIndex, 1);
+        this.contactTransactionPairs.splice(toBeRemoveContactIndex, 1);
     }
 
     public createContactsByTransactions(contactId : string, transactionId: string){
         let id = uuidv4();
         let paymentStatus = PaymentStatus.Pending
 
-        let newContactByTransaction : ContactsByTransaction = {
+        let newContactByTransaction : TransactionContactPair = {
             id,
             transactionId,
             contactId,
             paymentStatus
         }       
-        this._contactsByTransaction.push(newContactByTransaction);       
+        this.contactTransactionPairs.push(newContactByTransaction);       
     }
 
-    public updateContactsByTransactions(contactsByTransactionList : ContactsByTransaction[]){
-        this._contactsByTransaction.concat(contactsByTransactionList); 
+    public updateContactsByTransactions(contactsByTransactionList : TransactionContactPair[]){
+        this.contactTransactionPairs.concat(contactsByTransactionList); 
     }
 }
 
