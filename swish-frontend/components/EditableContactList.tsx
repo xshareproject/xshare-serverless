@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { SearchBar, ListItem } from 'react-native-elements';
 import {View} from './Themed';
+import {StyleSheet} from 'react-native';
 import { ContactSchema, Contacts, ContactsContext } from '../data_store/Contacts';
-
+import { EditableContext } from '../data_store/EditableContext';
 interface SearchState{
     search: string,
     contactList: ContactSchema[]
-    editable: boolean
 }
 
 interface SearchProps{
     contactList: ContactSchema[],
-    editable: boolean,
     onSubmitCallback: () => void
 }
 
@@ -21,7 +20,6 @@ export class EditableContactList extends React.Component<SearchProps, SearchStat
         this.state = {
           search: "",
           contactList: props.contactList,
-          editable: this.props.editable
         };
     }
 
@@ -34,17 +32,18 @@ export class EditableContactList extends React.Component<SearchProps, SearchStat
     }
 
     render(){
-        console.log("STATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: ", this.state.editable)
         const search = this.state.search;
         const contactList : ContactSchema[] = this.state.contactList;
-        let searchBar;
-        if(this.state.editable)
-            searchBar = <SearchBar placeholder="Search for contact"
-                                    onChangeText={this.updateSearch}
-                                    value={search} />
         return(
             <View>
-                {searchBar}
+                <EditableContext.Consumer>
+                { (editable) => (
+                    <SearchBar placeholder="Search for contact"
+                    onChangeText={this.updateSearch}
+                    value={search}
+                    containerStyle={editable? styles.displayShow : styles.displayHide }/>
+                )}
+                </EditableContext.Consumer>
                 {contactList.map((contact) => (
                     <ListItem
                         title={contact.name}
@@ -58,4 +57,14 @@ export class EditableContactList extends React.Component<SearchProps, SearchStat
     }
 }
 
+const styles = StyleSheet.create({
+    displayShow: {
+        flex: 1,
+    },
+    displayHide: {
+        display: "none"
+    }
+});
+
 EditableContactList.contextType = ContactsContext;
+EditableContactList.contextType = EditableContext;

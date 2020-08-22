@@ -8,6 +8,7 @@ import { PaymentStatus, ContactSchema, TransactionContactPair } from "../data_st
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
+import {EditableContext} from '../data_store/EditableContext';
 import { EditableContactList } from '../components/EditableContactList';
 
 interface TransactionDetailsState {
@@ -22,6 +23,7 @@ interface TransactionDetailsProps {
     navigation: NavigationProp<any>,
     route: Route
 }
+
 
 export default class TransactionDetailsScreen extends React.Component<TransactionDetailsProps, TransactionDetailsState>{
     constructor (props: any){
@@ -78,6 +80,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
             title: ""
         });
 
+        console.log("Detailed Screen Rendered", this.state.editable);
         return (
                 <React.Fragment>
                     {/* <View style={styles.topBar}>
@@ -90,7 +93,9 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                     </View> */}
                     <ScrollView style={styles.container}>
                         <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'}>
-                            <EditableContactList contactList={[]} editable={this.state.editable} onSubmitCallback={this.updateTransactionContact}></EditableContactList>
+                            <EditableContext.Provider value={this.state.editable}>
+                                <EditableContactList contactList={[]} onSubmitCallback={this.updateTransactionContact}></EditableContactList>
+                            </EditableContext.Provider>
                             {/* <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="name" label="Lender" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction} /> */}
                             <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="description" label="Description" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
                             <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="amount" label="Amount" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>

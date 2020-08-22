@@ -1,28 +1,30 @@
-Tech stack
+Project Dependancies
 =============== 
-	- Database: Postgres / MySQL.
-		○ Proposed: Postgres
-		
-	- Back-end
-		○ Proposed: NodeJS + Express
-		○ Other options: C#, Java - have supported SDK (Wrapper library for the API) 
-		○ With NodeJS, work with back-end directly
+	- Frontend
+		○ React & React Native
+		○ ExpoJS
+		○ Additional library: React Navigation, React Native Element
+		○ To install: run npm i on swish Root folder
 
-	- Front-end
-		○ React Native + Expo, probably no debate here
+	- Backend
+		○ ExpressJS
+		○ PostgreSQL
+		○ Sequelize ORM
+		○ To install: run npm i on swish-frontend folder
 
-Tasks
+Development
 =============== 
-	- Setup development environment
-		○ Database engine, user credentials
-		○ Project structure (Front + backend)
-	- Back-end
-		○ Setup Express, with API endpoints for users
-	- Front-end
-		○ Setup React Native +  Expo
-		○ Create mockup that will pull data from server / db and display them to devices, and the other way
-		○ Explore usage of Expo SDK to pull contact info from devices - for contact features
-	- Database 
-		○ Setup database, initial schemas and tables for users
-		○ Integrate server with database, write wrapper functions for interaction
+	- Frontend and backend can run independantly from each other, so in development only need to start one of them unless we are doing integration
+	- For backend running, Postgres installation are required and setup credentials (I will add instructions in here later)
+	- I will also add the setup script for database (initializing all tables and mockup data) 
+	
+	- To start both: npm start at root folder
+
+	- Frontend:
+		○ cd swish-frontend && npm start
+		○ Or npm run frontend at root folder
+
+	- Backend:
+		○ cd server && npm run dev 
+		○ Or npm run backend
 
