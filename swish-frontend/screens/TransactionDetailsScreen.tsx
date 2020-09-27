@@ -1,27 +1,32 @@
 import * as React from 'react';
 import { StyleSheet, Image, KeyboardAvoidingView, Platform, Route } from 'react-native';
-import { Button, Icon, Avatar } from 'react-native-elements';
+import { Button, Icon, Avatar, Overlay } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
-import { PaymentStatus, ContactSchema, TransactionContactPair } from "../data_store/Contacts";
+import { PaymentStatus, ContactSchema, TransactionContactPair, Contacts } from "../data_store/Contacts";
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
 import {EditableContext} from '../data_store/EditableContext';
-import { EditableContactList } from '../components/EditableContactList';
+import { PaymentBreakdown } from '../components/PaymentBreakdown';
 
 interface TransactionDetailsState {
     currentTransaction: TransactionSchema,
     editedTransaction: TransactionSchema,
-    transactionContactList: TransactionContactPair[],
-    editedTransactionContactList: TransactionContactPair[],
-    editable: boolean
+    editable: boolean,
+    displaySavePrompt: boolean,
+    saveChanges: boolean,
+    transactionType: TRANSACTION_TYPE
 }
 
 interface TransactionDetailsProps {
     navigation: NavigationProp<any>,
     route: Route
+}
+
+enum TRANSACTION_TYPE{
+    STANDARD, MEAL, RECURRING
 }
 
 
@@ -31,11 +36,18 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         this.state = {
             currentTransaction : this.props.route.params,
             editedTransaction: this.props.route.params,
-            transactionContactList: [],
-            editedTransactionContactList: [],
-            editable: false
+            editable: false,
+            displaySavePrompt: false,
+            saveChanges: false,
+            transactionType: TRANSACTION_TYPE.STANDARD,
         }
     };
+
+    updateTransactionType = (transactionType : TRANSACTION_TYPE) => {
+        this.setState({
+            transactionType
+        });
+    }
 
     updateEditedTransaction = (propertyName: string, value: any) => {
         let editedTransaction : TransactionSchema = this.state.editedTransaction;
@@ -50,67 +62,102 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         this.setState({editable: !this.state.editable}, 
             () => {
                 if(!this.state.editable){
-                    this.context.updateTransaction(this.state.editedTransaction);
+                    this.setState({
+                        displaySavePrompt: !this.state.displaySavePrompt
+                    })
                 }        
             });    
     }
 
-    updateTransactionContact = () => {
-
+    toggleOverlay = () => {
+        this.setState({
+            displaySavePrompt: !this.state.displaySavePrompt
+        });
     }
 
-    render() {
-        this.props.navigation.setOptions({
-            headerRight: () => (
-                <Button   
-                icon={
-                        <Icon
-                        name='pencil'
-                        type='entypo'
-                        size={20}
-                        color="black"
-                        />
-                    }
-                title={this.state.editable? 'Save' : 'Edit'}
-                titleStyle={{color: 'black'}}
-                type="clear"
-                onPress={() => this.handleButtonClick()}
-                />
-            ),
-            title: ""
-        });
+    saveChanges = () => {
+        this.context.updateTransaction(this.state.editedTransaction); 
+        this.setState({
+            saveChanges: true,
+            displaySavePrompt: false
+        }); 
+    }
 
-        console.log("Detailed Screen Rendered", this.state.editable);
+    cancelChanges = () => {
+        this.setState({
+            saveChanges: false,
+            displaySavePrompt: false,
+            editedTransaction: this.state.currentTransaction
+        });
+    }
+    
+    render() {
+        let displaySaveOverlay = <Overlay isVisible={this.state.displaySavePrompt} onBackdropPress={() => this.toggleOverlay()}>
+            <View>
+                <Text>Save changes?</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <Button title="Save" 
+                    onPress={() => this.saveChanges()}/>
+                    <Button title="Cancel"
+                    onPress={() => this.cancelChanges()}/>
+                </View>
+            </View>
+        </Overlay>
+
+        console.log("Detailed Screen Rendered", TRANSACTION_TYPE[this.state.transactionType]);
         return (
                 <React.Fragment>
-                    {/* <View style={styles.topBar}>
-                        <Text style={{fontSize: 20, textAlignVertical: "center"}}>Your transaction with </Text>
-                        <Avatar rounded
-                        source={this.state.currentTransaction.image}
-                        size="medium"
-                        avatarStyle={{paddingLeft: 10}}
-                        containerStyle={{marginTop: 25}} />
-                    </View> */}
+                    {displaySaveOverlay}
+                    <View style={styles.topBar}>
+                        <View style={{flexDirection: "row", backgroundColor: APP_PRIMARY_COLOR, alignSelf: 'center'}}>
+                            <Text style={{textAlign: 'center'}}>Created by you on {this.state.editedTransaction.createdDate} </Text>
+                            <Icon
+                                name='pencil'
+                                type='entypo'
+                                size={20}
+                                color="black"
+                                onPress={() => this.handleButtonClick()}
+                            />  
+                        </View>
+                        <View style={{flexDirection: "row", backgroundColor: APP_PRIMARY_COLOR, alignSelf: 'center'}}>
+                            <Icon
+                                name='checkcircleo'
+                                type='antdesign'
+                                size={20}
+                                containerStyle={{alignSelf: 'center', paddingHorizontal: 2}}
+                            />
+                            <Text style={{fontSize: 20, textAlign: 'center'}}>{this.state.editedTransaction.transactionName}</Text>
+                        </View>
+                    </View>
+                    <RNPickerSelect
+                    style={pickerStyle}
+                    disabled={!this.state.editable}
+                    items={[
+                        {label: 'Standard Transaction', value: TRANSACTION_TYPE.STANDARD},
+                        {label: 'Meal Transaction', value: TRANSACTION_TYPE.MEAL},
+                        {label: 'Recurring Transcation', value: TRANSACTION_TYPE.RECURRING}
+                    ]}
+                    onValueChange={(value) => {
+                        if (value !== null)
+                            this.updateTransactionType(value);
+                    }}
+
+                    placeholder={{label: 'Choose Transaction Mode', value: null}}
+                    />
                     <ScrollView style={styles.container}>
                         <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'}>
-                            <EditableContext.Provider value={this.state.editable}>
-                                <EditableContactList contactList={[]} onSubmitCallback={this.updateTransactionContact}></EditableContactList>
-                            </EditableContext.Provider>
-                            {/* <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="name" label="Lender" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction} /> */}
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="description" label="Description" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="amount" label="Amount" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="createdDate" label="Created On" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="paymentDate" label="Payment Expected On" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="status" label="Payment Status" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
-                            <FieldInputWithLabel currentTransaction={this.state.currentTransaction} propertyName="recurring" label="Recurring Payment" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>
+                            <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="paymentDate" label="PAYMENT DEADLINE" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
+                            <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="note" label="NOTE" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
+                            <PaymentBreakdown currentTransaction={this.state.editedTransaction} editable={this.state.editable} saveChanges={this.state.saveChanges}></PaymentBreakdown>
+                            <Text style={this.state.transactionType === TRANSACTION_TYPE.MEAL ? null : {display: 'none'}}>Tax: 12%, Tips: 5%</Text>
+                            <Button title={"Recurring Details"} titleStyle={{color: 'black'}} containerStyle={this.state.transactionType === TRANSACTION_TYPE.RECURRING ? null : {display: 'none'}}/>
+                            <Button title={"Complete Payment"} titleStyle={{color: 'black'}} buttonStyle={{backgroundColor: APP_PRIMARY_COLOR}}/>
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </React.Fragment>
         );
     }
 }
-
-TransactionDetailsScreen.contextType = TransactionsContext;
 
 interface TextInputWithLabelProps{
     currentTransaction: TransactionSchema,
@@ -121,76 +168,30 @@ interface TextInputWithLabelProps{
 }
 
 function FieldInputWithLabel(props : TextInputWithLabelProps){
-    switch (props.propertyName){
-        case "status":
-            return(
-                <View style={styles.inputContainer}>
-                    <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
-                    <RNPickerSelect
-                    onValueChange={(value) => {
-                        if(value !== null){
-                            props.updateEditedTransaction(props.propertyName, value)}
-                        }
-                    }
-                    style={pickerStyle}
-                    disabled={!props.editable}
-                    items={[
-                        {label: 'Pending', value: PaymentStatus.Pending},
-                        {label: 'Unpaid', value: PaymentStatus.Unpaid},
-                        {label: 'Paid', value: PaymentStatus.Paid}
-                    ]}
-                    placeholder={{label: 'Current: ' + PaymentStatus[props.currentTransaction.status],
-                                 value: null }}
-                    />
-                </View>
-            );
-        case "recurring": 
-            var recurringValueString = props.currentTransaction.recurring ? 'Yes' : 'No';
-            var placeholderText = 'Current: ' + recurringValueString;
-            return(
-                <View style={styles.inputContainer}>
-                    <Text style={{textAlignVertical: "center"}}>{props.label + ": "}</Text>
-                    <RNPickerSelect
-                    onValueChange={(value) => {
-                        if(value !== null){
-                            props.updateEditedTransaction(props.propertyName, value)}
-                        }
-                    }
-                    style={pickerStyle}
-                    disabled={!props.editable}
-                    items={[
-                        {label: 'No', value: false},
-                        {label: 'Yes', value: true}
-                    ]}
-                    placeholder={{label: placeholderText,
-                                 value: null }}
-                    />
-                </View>
-            );
-
-        default:
-            var defaultValue = props.currentTransaction[props.propertyName];
-            var label : string = props.label + ": ";
-            var styling = props.editable ? styles.inputFieldEditable : styles.inputField;
-            return (
-                <View style={styles.inputContainer}>
-                    <Text style={{textAlignVertical: "center"}}>{label}</Text>
-                    <TextInput style={styling} 
-                    onChangeText={(text) => 
-                        props.updateEditedTransaction(props.propertyName, text)}
-                    editable={props.editable}>
-                    {defaultValue}
-                    </TextInput>
-                </View> 
-            );
-    }
+    var defaultValue = props.currentTransaction[props.propertyName];
+    var label : string = props.label;
+    var styling = props.editable ? styles.inputFieldEditable : styles.inputField;
+    return (
+        <View>
+            <Text style={{borderBottomWidth: 1}}>{label}</Text>
+            <TextInput style={styling} 
+            onChangeText={(text) => 
+                props.updateEditedTransaction(props.propertyName, text)}
+            editable={props.editable}>
+            {defaultValue}  
+            </TextInput>
+        </View> 
+    );
 }
+
+TransactionDetailsScreen.contextType = TransactionsContext;
 
 const styles = StyleSheet.create({
     topBar: {
         backgroundColor: APP_PRIMARY_COLOR, 
         flex: .2,
-        flexDirection: 'row',
+        flexDirection: 'column',
+        paddingTop: 50
     },
     container: {
         flex: 1,
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     },
     inputFieldEditable: {
         paddingLeft: 5, 
-        backgroundColor: APP_PRIMARY_COLOR, 
+        backgroundColor: '#ffd700', 
         flex: 1
     }
 });
@@ -216,12 +217,10 @@ const pickerStyle = StyleSheet.create({
     inputAndroid: {
         paddingLeft: 100,
         width: 200,
-        // backgroundColor: APP_MAIN_THEME_COLOR,
     },
     inputIOS: {
         paddingLeft: 100,
         width: 200,
-        // backgroundColor: APP_MAIN_THEME_COLOR,
     }
 })
 

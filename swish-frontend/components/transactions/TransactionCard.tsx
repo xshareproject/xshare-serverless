@@ -18,7 +18,7 @@ export default function TransactionCard(props: TransactionCardProps){
     //getContactByTransactions returns a void[], therefore required casting to ContactSchema[]
     //however as void[] is not comparable to ContactSchema[], it requires casting to unknown
     //TODO: Refactoring
-    const contactListVoid = contactContext.getContactsByTransactions(props.transaction.id);
+    const contactListVoid = contactContext.getContactsByTransaction(props.transaction.id);
     const contactList = contactListVoid as unknown as ContactSchema[];
 
     let transactionContactName : string = contactList[0].name;
@@ -33,7 +33,7 @@ export default function TransactionCard(props: TransactionCardProps){
                 <View style={styles.card}> 
                     <Avatar rounded
                     size="medium"
-                    source={contactList[0].image}
+                    source={contactList[0].profilePicture}
                     containerStyle={styles.avatar}
                     />
                     <View style={{flexDirection: 'column', flex: 0.4}}>
@@ -41,7 +41,7 @@ export default function TransactionCard(props: TransactionCardProps){
                         <Text style={styles.text}>{props.transaction.transactionName}</Text>
                     </View>
                     <View style={{flexDirection: 'column', flex: 0.4}}>
-                        <Text style={styles.text}>{"$ " + props.transaction.amount}</Text>
+                        <Text style={styles.text}>{"$ " + props.transaction.totalAmount}</Text>
                         <Text style={styles.text}>{props.transaction.paymentDate}</Text>
                     </View>
                     <Text style={styles.text}>{PaymentStatus[0]}</Text>

@@ -1,19 +1,21 @@
 import * as React from 'react';
 import harold from '../assets/images/profile_test.webp';
 const {v4: uuidv4} = require('uuid');
+import * as lodash from 'lodash';
 
 export interface ContactSchema {
     id: string,
     ownerId: string,
+    userId: string,
     name: string,
     email: string,
     phoneNumber: string,
     createdDate: string,
-    image: any,     
+    profilePicture: any,     
 }
 
 export interface TransactionContactPair {
-    id: string,
+    id: string, 
     transactionId: string,
     contactId: string,
     paymentStatus: PaymentStatus,
@@ -30,29 +32,32 @@ const contactsDefault : ContactSchema[] = [
     {
         id: "1",
         ownerId: "0755850f-79a1-46f8-a06b-d169de9a23e4",
+        userId: "",
         name: "Ken",
         email: "kentest@gmail.com",
         phoneNumber: "",
         createdDate: "Jan 20th",
-        image: harold
+        profilePicture: harold
     },
     {
         id: "2",
         ownerId: "0755850f-79a1-46f8-a06b-d169de9a23e4",
+        userId: "",
         name: "Matthew",
         email: "matthew@gmail.com",
         phoneNumber: "",
         createdDate: "Jan 20th",
-        image: harold
+        profilePicture: harold
     },
     {
         id: "3",
         ownerId: "0755850f-79a1-46f8-a06b-d169de9a23e4",
+        userId: "",
         name: "Krystal",
         email: "krystal@gmail.com",
         phoneNumber: "",
         createdDate: "Jan 20th",
-        image: harold
+        profilePicture: harold
     }
 ]
 
@@ -89,11 +94,11 @@ const contactsByTransactionsDefault : TransactionContactPair[] = [
 
 export class Contacts {
     private _contacts : ContactSchema[];
-    private contactTransactionPairs : TransactionContactPair[];
+    private _contactTransactionPairs : TransactionContactPair[];
 
     public constructor(){
         this._contacts = contactsDefault;
-        this.contactTransactionPairs = contactsByTransactionsDefault;
+        this._contactTransactionPairs = contactsByTransactionsDefault;
     }
 
     public get contacts(){
@@ -105,33 +110,37 @@ export class Contacts {
     }
 
     public getContactByName(name: string){
-        return this.contacts.filter((contact) => {return contact.name.toLowerCase().includes(name.toLowerCase())});
+        let contact = this.contacts.filter((contact) => {return contact.name.toLowerCase().includes(name.toLowerCase())});
+        return lodash.cloneDeep(contact);
     }
 
-    public getContactsByTransactions(transactionId : string){
-        let contactsByTransactions : TransactionContactPair[] = this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
+    public getContactsByTransaction(transactionId : string){
+        let contactsByTransactions : TransactionContactPair[] = this._contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
         let contactList = contactsByTransactions.map((contactsByTransaction) => {return this.getContactsById(contactsByTransaction.contactId);})
         // console.log("ContactByTransaction: ", contactsByTransactions);
         // console.log("ContactList: ", contactList); 
-        return contactList;
+        return lodash.cloneDeep(contactList);
     }
 
-    public getTransactionContactPair(transactionId: string){
-        return this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
+    public getTransactionContactPairs(transactionId: string){
+        let transactionContactPairs = this._contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId === transactionId });
+        return lodash.cloneDeep(transactionContactPairs);
     }
 
+    //TODO: Required factoring for performance purpose
     public deleteContactsByTransactions(transactionId : string){
-        let filteredContacts : TransactionContactPair[] = this.contactTransactionPairs.filter((contactItem) => {return contactItem.transactionId !== transactionId});
-        this.contactTransactionPairs = filteredContacts;
+        let filteredContacts : TransactionContactPair[] = this._contactTransactionPairs.filter((contactTransactionPair) => {return contactTransactionPair.transactionId !== transactionId});
+        this._contactTransactionPairs = filteredContacts;
+        // console.log("DELETED LIST", this._contactTransactionPairs);
     }
 
     public deleteContactsByTransactionsSingle(transactionId : string, contactId: string){
-        let toBeRemoveContactIndex = this.contactTransactionPairs.findIndex(contactItem => 
+        let toBeRemoveContactIndex = this._contactTransactionPairs.findIndex(contactItem => 
             contactItem.contactId === contactId && contactItem.transactionId === transactionId);
-        this.contactTransactionPairs.splice(toBeRemoveContactIndex, 1);
+        this._contactTransactionPairs.splice(toBeRemoveContactIndex, 1);
     }
 
-    public createContactsByTransactions(contactId : string, transactionId: string){
+    public createContactsByTransactions(contactId : string, transactionId: string, amountOwned: number){
         let id = uuidv4();
         let paymentStatus = PaymentStatus.Pending
 
@@ -139,13 +148,15 @@ export class Contacts {
             id,
             transactionId,
             contactId,
-            paymentStatus
+            amountOwned,
+            paymentStatus,
         }       
-        this.contactTransactionPairs.push(newContactByTransaction);       
+        this._contactTransactionPairs.push(newContactByTransaction);       
     }
 
     public updateContactsByTransactions(contactsByTransactionList : TransactionContactPair[]){
-        this.contactTransactionPairs.concat(contactsByTransactionList); 
+        this._contactTransactionPairs = this._contactTransactionPairs.concat(contactsByTransactionList);
+        // console.log("UPDATEDDDDDDDD LIST", this._contactTransactionPairs);
     }
 }
 

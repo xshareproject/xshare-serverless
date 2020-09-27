@@ -22,7 +22,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Transactions"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
         name="Home"
@@ -59,7 +59,7 @@ export default function BottomTabNavigator() {
           type='fontisto'
           size= {20}
           color={color}/>,
-          tabBarVisible: getTabBarVisibility(route)
+          // tabBarVisible: getTabBarVisibility(route)
           })
         }
       />
@@ -128,6 +128,7 @@ function TransactionTabNavigation() {
       <TransactionsStackNavigator.Screen 
         name="Details"
         component={TransactionDetailsScreen}
+        options={{ headerShown: false }}  
       />
     </TransactionsStackNavigator.Navigator>
   );
