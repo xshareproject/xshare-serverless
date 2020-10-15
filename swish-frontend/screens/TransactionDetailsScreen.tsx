@@ -4,15 +4,13 @@ import { Button, Icon, Avatar, Overlay } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
-import { PaymentStatus, ContactSchema, TransactionContactPair, Contacts } from "../data_store/Contacts";
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
-import {EditableContext} from '../data_store/EditableContext';
 import { PaymentBreakdown } from '../components/PaymentBreakdown';
+import * as lodash from 'lodash';
 
 interface TransactionDetailsState {
-    currentTransaction: TransactionSchema,
     editedTransaction: TransactionSchema,
     editable: boolean,
     displaySavePrompt: boolean,
@@ -31,16 +29,15 @@ enum TRANSACTION_TYPE{
 
 
 export default class TransactionDetailsScreen extends React.Component<TransactionDetailsProps, TransactionDetailsState>{
-    constructor (props: any){
-        super(props);
+    constructor (props: any, context: any){
+        super(props, context);
         this.state = {
-            currentTransaction : this.props.route.params,
-            editedTransaction: this.props.route.params,
+            editedTransaction : lodash.cloneDeep(this.props.route.params),
             editable: false,
             displaySavePrompt: false,
             saveChanges: false,
             transactionType: TRANSACTION_TYPE.STANDARD,
-        }
+        };
     };
 
     updateTransactionType = (transactionType : TRANSACTION_TYPE) => {
@@ -87,7 +84,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         this.setState({
             saveChanges: false,
             displaySavePrompt: false,
-            editedTransaction: this.state.currentTransaction
+            editedTransaction: this.props.route.params
         });
     }
     
@@ -151,6 +148,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                             <PaymentBreakdown currentTransaction={this.state.editedTransaction} editable={this.state.editable} saveChanges={this.state.saveChanges}></PaymentBreakdown>
                             <Text style={this.state.transactionType === TRANSACTION_TYPE.MEAL ? null : {display: 'none'}}>Tax: 12%, Tips: 5%</Text>
                             <Button title={"Recurring Details"} titleStyle={{color: 'black'}} containerStyle={this.state.transactionType === TRANSACTION_TYPE.RECURRING ? null : {display: 'none'}}/>
+                            <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="totalAmount" label="TOTAL AMOUNT" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
                             <Button title={"Complete Payment"} titleStyle={{color: 'black'}} buttonStyle={{backgroundColor: APP_PRIMARY_COLOR}}/>
                         </KeyboardAvoidingView>
                     </ScrollView>
@@ -204,12 +202,14 @@ const styles = StyleSheet.create({
     inputField: {
         paddingLeft: 5,
         backgroundColor: '#ffffff',  
-        flex: 1
+        flex: 1,
+        borderBottomWidth: 1
     },
     inputFieldEditable: {
         paddingLeft: 5, 
         backgroundColor: '#ffd700', 
-        flex: 1
+        flex: 1,
+        borderBottomWidth: 1
     }
 });
 

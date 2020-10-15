@@ -156,7 +156,6 @@ export class Contacts {
 
     public updateContactsByTransactions(contactsByTransactionList : TransactionContactPair[]){
         this._contactTransactionPairs = this._contactTransactionPairs.concat(contactsByTransactionList);
-        // console.log("UPDATEDDDDDDDD LIST", this._contactTransactionPairs);
     }
 }
 

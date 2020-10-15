@@ -6,7 +6,7 @@ import { ContactSchema, Contacts, ContactsContext, TransactionContactPair, Payme
 import { TransactionSchema } from '../data_store/Transactions';
 import { TextInput } from 'react-native-gesture-handler';
 
-interface SearchState{
+interface PaymentBreakdownState{
     search: string,
     searchResultList: ContactSchema[],
     contactTransactionPairs: (TransactionContactPair)[],
@@ -16,15 +16,15 @@ interface SearchState{
     saveChanges: boolean,
 }
 
-interface SearchProps{
+interface PaymentBreakdownProps{
     currentTransaction: TransactionSchema,
     // onSubmitCallback: (TransactionContactList : TransactionContactPair[]) => void,
     editable: boolean,
     saveChanges: boolean
 }
 
-export class PaymentBreakdown extends React.Component<SearchProps, SearchState>{
-    constructor(props : SearchProps){
+export class PaymentBreakdown extends React.Component<PaymentBreakdownProps, PaymentBreakdownState>{
+    constructor(props : PaymentBreakdownProps){
         super(props);
         this.state = {
           search: "",
@@ -76,7 +76,6 @@ export class PaymentBreakdown extends React.Component<SearchProps, SearchState>{
         let indexToModify = this.state.contactTransactionPairs.findIndex((contactTransactionPair) => {return contactTransactionPair?.contactId === contactId});
         let contactTransactionPairList = this.state.contactTransactionPairs;
         contactTransactionPairList[indexToModify]["amountOwned"] = amountNum;
-        let check : TransactionContactPair[] = this.context.getTransactionContactPairs(this.props.currentTransaction.id);
         this.setState({
             contactTransactionPairs: contactTransactionPairList
         });
@@ -107,7 +106,7 @@ export class PaymentBreakdown extends React.Component<SearchProps, SearchState>{
         }
     }
 
-    static getDerivedStateFromProps = (nextProps : SearchProps, prevState : SearchState) => {
+    static getDerivedStateFromProps = (nextProps : PaymentBreakdownProps, prevState : PaymentBreakdownState) => {
         if(nextProps.editable !== prevState.editable){
             return ({editable: nextProps.editable})
         }
@@ -183,10 +182,6 @@ export class PaymentBreakdown extends React.Component<SearchProps, SearchState>{
                         /> 
                     </View>))} 
                 </View>      
-                <View style={{flexDirection: "row"}}>
-                    <Text style={{alignSelf: 'center', flex: 1, marginLeft: 15}}>Total</Text>
-                    <TextInput style={{flex: 0.9}}>{"$" + this.props.currentTransaction.totalAmount}</TextInput>
-                </View>
             </View>
         );
     }
