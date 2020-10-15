@@ -5,7 +5,7 @@
   "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "npm run dev --prefix ./server",
-    "frontend": "npm start --prefix ./Swish"
+    "frontend": "npm start --prefix ./swish-frontend"
   },
   "repository": {
     "type": "git",

@@ -1,35 +1,78 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+import Home from '../screens/HomeScreen';
+import ContactScreen from '../screens/ContactScreen';
+import TransactionsOverviewScreen from '../screens/TransactionsOverviewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+
+import TransactionDetailsScreen from '../screens/TransactionDetailsScreen';
+
+const BottomTab = createBottomTabNavigator();
+// const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Transactions"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Home"
+        component={HomeTabNavigation}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='home' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Contacts"
+        component={ContactTabNavigation}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='contacts' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
+        }}
+      />
+      <BottomTab.Screen
+        name="Transactions"
+        component={TransactionTabNavigation}
+        options = { 
+          ({route}) => ({
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='paper-plane' 
+          type='fontisto'
+          size= {20}
+          color={color}/>,
+          // tabBarVisible: getTabBarVisibility(route)
+          })
+        }
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileTabNavigation}
+        options = {{
+          tabBarIcon: ({ color }) => 
+          <Icon 
+          name='user' 
+          type='ant-design'
+          size= {20}
+          color={color}/>
         }}
       />
     </BottomTab.Navigator>
@@ -44,30 +87,72 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const HomeStackNavigator = createStackNavigator();
 
-function TabOneNavigator() {
+function HomeTabNavigation() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+    <HomeStackNavigator.Navigator>
+      <HomeStackNavigator.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
       />
-    </TabOneStack.Navigator>
+    </HomeStackNavigator.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const ContactsStackNavigator = createStackNavigator();
 
-function TabTwoNavigator() {
+function ContactTabNavigation() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <ContactsStackNavigator.Navigator>
+      <ContactsStackNavigator.Screen
+        name="Contact"
+        component={ContactScreen}
+        options={{ headerShown: false }}
       />
-    </TabTwoStack.Navigator>
+    </ContactsStackNavigator.Navigator>
   );
+}
+
+const TransactionsStackNavigator = createStackNavigator();
+
+function TransactionTabNavigation() {
+  return (
+    <TransactionsStackNavigator.Navigator>
+      <TransactionsStackNavigator.Screen
+        name="Overview"
+        component={TransactionsOverviewScreen}
+        options={{ headerShown: false }}
+      />
+      <TransactionsStackNavigator.Screen 
+        name="Details"
+        component={TransactionDetailsScreen}
+        options={{ headerShown: false }}  
+      />
+    </TransactionsStackNavigator.Navigator>
+  );
+}
+
+const ProfileStackNavigator = createStackNavigator();
+
+function ProfileTabNavigation() {
+  return (
+    <ProfileStackNavigator.Navigator>
+      <ProfileStackNavigator.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+    </ProfileStackNavigator.Navigator>
+  );
+}
+
+const getTabBarVisibility = (route : any) => {
+  if(route.state){
+    const routeName = route.state.routes[route.state.index].name;
+    if (routeName === "Details")
+      return false;
+  }
+  return true;
 }
