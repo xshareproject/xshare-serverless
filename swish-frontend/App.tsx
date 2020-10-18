@@ -6,9 +6,14 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {TransactionsContext, Transactions} from './data_store/Transactions';
 import {ContactsContext, Contacts} from './data_store/Contacts'
+import { Provider } from 'react-redux'
+import {createStore} from 'redux'
+import {rootReducer} from './redux/root-reducer';
+
 export default function App(){
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  const store = createStore(rootReducer)
   if (!isLoadingComplete) {
     return null;
   } 
@@ -16,6 +21,7 @@ export default function App(){
     var transactions = new Transactions();
     var contacts = new Contacts();
     return (  
+      <Provider store = {store}>
        <TransactionsContext.Provider value={transactions}>
          <ContactsContext.Provider value={contacts}>
             <SafeAreaProvider>
@@ -24,6 +30,7 @@ export default function App(){
             </SafeAreaProvider>
          </ContactsContext.Provider>
        </TransactionsContext.Provider>
+      </Provider>
     );
   }
 }
