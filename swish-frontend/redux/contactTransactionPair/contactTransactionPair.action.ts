@@ -1,9 +1,10 @@
 import { AppActions } from "../types/types.actions"
 import { Contact } from "../types/types.contact"
-
-export const addContactToTransaction = (contact : Contact): AppActions => ({
+import {Transaction} from '../types/types.transaction';
+export const addContactToTransaction = (contact : Contact, transaction: Transaction): AppActions => ({
     type: "ADD_CONTACT_TO_TRANSACTION",
-    contact
+    contact,
+    transaction
 })
 
 export const removeContactFromTransaction = (contactId: string) : AppActions => ({

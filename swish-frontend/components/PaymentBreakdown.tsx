@@ -5,6 +5,15 @@ import {StyleSheet, Text, FlatList} from 'react-native';
 import { ContactSchema, Contacts, ContactsContext, TransactionContactPair, PaymentStatus } from '../data_store/Contacts';
 import { TransactionSchema } from '../data_store/Transactions';
 import { TextInput } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { ContactTransactionPair } from '../redux/types/types.ContactTransactionPair';
+import {AppState} from '../redux/root-reducer';
+import {Dispatch} from 'redux';
+import {Contact} from '../redux/types/types.Contact';
+import {AppActions} from '../redux/types/types.actions';
+import { Transaction } from '../redux/types/types.transaction';
+import { addContactToTransaction, editAmount, removeContactFromTransaction } from '../redux/contactTransactionPair/contactTransactionPair.action';
+
 
 interface PaymentBreakdownState{
     search: string,
@@ -117,6 +126,9 @@ export class PaymentBreakdown extends React.Component<PaymentBreakdownProps, Pay
     }
 
     render(){
+        //Need to put it to PaymentBreakdownProps
+        //Line 217 is just a trial, will put it to PaymentBreakProps, when everything else in props in finish
+        //const {addContactToTransaction, removeContactFromTransaction, editAmount} = this.props
         let contactContext = this.context as Contacts;
         const search = this.state.search;
         let displayResultElement = <FlatList 
@@ -200,3 +212,29 @@ const styles = StyleSheet.create({
 });
 
 PaymentBreakdown.contextType = ContactsContext;
+
+
+interface PaymentBreakdownPropss {
+    addContactToTransaction: (contact:Contact, transaction: Transaction) => void;
+    removeContactFromTransaction: (contactId: string) => void;
+    editAmount: (contactId: string, amount: number) => void;
+}
+
+
+const mapStateToProps = (state: AppState) => {
+    return {
+        contactTransactionPair: state.contactTransactionPairReducer,
+        currentTransaction: state.transactionReducer.
+    }
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) : PaymentBreakdownPropss => {
+    return {
+        addContactToTransaction: (contact, transaction) => dispatch(addContactToTransaction(contact,transaction)),
+        removeContactFromTransaction: (contactId) => dispatch(removeContactFromTransaction(contactId)),
+        editAmount: (contactId, amount) => dispatch(editAmount(contactId,amount))
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentBreakdown)

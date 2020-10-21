@@ -10,9 +10,17 @@ export const contactTransactionPairReducer =
 : ContactTransactionPair[] => {
     switch(action.type) {
         case "ADD_CONTACT_TO_TRANSACTION":
-            return [...state, ]
-            //TODO
-
+            let transactionId = action.transaction.id;
+            let newContactTransactionPair : ContactTransactionPair = {
+                id: "",
+                transactionId,
+                contactId: action.contact.id,
+                paymentStatus: PaymentStatus.Pending,
+                amountOwned: 0
+            };    
+            state.push(newContactTransactionPair);
+            return state;
+        
         case "REMOVE_CONTACT_FROM_TRANSACTION":
             let indexToRemove = state.findIndex((contactTransactionPair) => {return contactTransactionPair?.contactId === action.contactId});
             state.splice(indexToRemove, 1);
@@ -24,6 +32,7 @@ export const contactTransactionPairReducer =
             let contactTransactionPairList = state;
             contactTransactionPairList[indexToModify]["amountOwned"] = amountNum;          
             return contactTransactionPairList;
+        
         default:
             return state;
 
