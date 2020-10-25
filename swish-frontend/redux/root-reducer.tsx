@@ -6,11 +6,12 @@ import { combineReducers } from 'redux';
 //import navigationReducer from './navigation/navigation.reducer';
 //import storage from 'redux-persist/lib/storage';
 import {contactTransactionPairReducer} from './contactTransactionPair/contactTransactionPair.reducer';
-
+import {transactionReducer} from './transaction/transaction.reducer';
 
 
 export const rootReducer = combineReducers({
-    contactTransactionPair: contactTransactionPairReducer,
+    contactTransactionPairReducer,
+    transactionReducer
 });
 
 export type AppState = ReturnType<typeof rootReducer>

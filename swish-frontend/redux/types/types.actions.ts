@@ -1,7 +1,7 @@
 
 import { removeContactFromTransaction } from '../contactTransactionPair/contactTransactionPair.action'
-import { addContactToTransaction } from '../transaction/transaction.actions'
-import {Contact} from './types.contact'
+import {Contact} from './types.contact';
+import {Transaction} from './types.transaction';
 import { ContactSchema } from '../../data_store/Contacts';
 
 export const ADD_CONTACT_TO_TRANSACTION = "ADD_CONTACT_TO_TRANSACTION";
@@ -19,7 +19,8 @@ export const DELETE_CONTACT = "DELETE_CONTACT";
 
 export interface addContactToTransactionAction {
     type: typeof ADD_CONTACT_TO_TRANSACTION,
-    contact: Contact
+    contact: Contact,
+    transaction: Transaction
 }
 
 export interface removeContactFromTransactionAction {
@@ -69,7 +70,40 @@ export interface deleteContactAction {
 export type ContactTransactionPairActionTypes = 
 addContactToTransactionAction | removeContactFromTransactionAction | editAmountAction 
 
+<<<<<<< HEAD
 export type ContactActionTypes = loadContact | readAllContact | createContactAction | updateContactAction | updateContactByPropertyAction | deleteContactAction;
 
 //Add more as we expand our redux
 export type AppActions = ContactTransactionPairActionTypes | ContactActionTypes;
+=======
+export const CREATE_TRANSACTION = 'CREATE_TRANSACTION';
+export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
+export const UPDATE_TRANSACTION_BY_PROPERTY = 'UPDATE_TRANSACTION_BY_PROPERTY';
+export const UPDATE_TRANSACTION_TYPE = 'UPDATE_TRANSACTION_TYPE';
+export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
+
+export interface updateTransactionTypeAction {
+    type: typeof UPDATE_TRANSACTION_TYPE,
+    transactionType: TRANSACTION_TYPE,
+    transactionId: Transaction
+}
+
+export interface updateTransactionAction {
+    type: typeof UPDATE_TRANSACTION,
+    transaction: Transaction
+}
+
+export interface updateTransactionByPropertyAction {
+    type: typeof UPDATE_TRANSACTION_BY_PROPERTY,
+    id: string,
+    propertyName: string,
+    value: any
+}
+
+export type TransactionActionTypes = updateTransactionTypeAction | updateTransactionAction | updateTransactionByPropertyAction
+
+
+
+//Add more as we expand our redux
+export type AppActions = ContactTransactionPairActionTypes | TransactionActionTypes
+>>>>>>> 2f1d50d291636a28120da91c747dd277bc1436a1

@@ -1,17 +1,20 @@
-import TransactionActionTypes from './transaction.types';
+import { AppActions } from "../types/types.actions";
+import {Transaction, TRANSACTION_TYPE} from '../types/types.transaction';
 
-export const getTransaction = () => ({
-    type: TransactionActionTypes.GET_TRANSACTION
+export const updateTransactionType = (transactionType: TRANSACTION_TYPE, transactionId: Transaction) : AppActions => ({
+    type: "UPDATE_TRANSACTION_TYPE",
+    transactionType,
+    transactionId
 })
 
-//item : ContactSchema 
-export const addContactToTransaction = (item:any) => ({
-    type: TransactionActionTypes.ADD_CONTACT_TO_TRANSACTION,
-    payload: item
+export const updateTransaction = (transaction: Transaction) : AppActions => ({
+    type: "UPDATE_TRANSACTION",
+    transaction
 })
 
-export const removeContactToTransaction = (item:any) => ({
-    type: TransactionActionTypes.REMOVE_CONTACT_FROM_TRANSACTION,
-    payload: item
+export const updateTransactionByProperty = (id: string, propertyName: string, value: any) => ({
+    type: "UPDATE_TRANSACTION_BY_PROPERTY",
+    id,
+    propertyName,
+    value
 })
-
