@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/pkbui/Swish#readme",
   "dependencies": {
+    "@types/react": "^16.9.53",
     "concurrently": "^5.2.0",
+    "react": "^16.14.0",
+    "react-native-elements": "^3.0.0-alpha.1",
+    "react-native-gesture-handler": "^1.8.0",
     "uuid": "^8.2.0"
   }
 }

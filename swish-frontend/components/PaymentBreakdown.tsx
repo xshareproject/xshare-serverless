@@ -224,7 +224,7 @@ interface PaymentBreakdownPropss {
 const mapStateToProps = (state: AppState) => {
     return {
         contactTransactionPair: state.contactTransactionPairReducer,
-        currentTransaction: state.transactionReducer.
+        currentTransaction: state.transactionReducer
     }
 };
 

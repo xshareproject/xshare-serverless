@@ -1,7 +1,7 @@
 
 import { removeContactFromTransaction } from '../contactTransactionPair/contactTransactionPair.action'
 import {Contact} from './types.contact';
-import {Transaction} from './types.transaction';
+import {Transaction, TRANSACTION_TYPE} from './types.transaction';
 import { ContactSchema } from '../../data_store/Contacts';
 
 export const ADD_CONTACT_TO_TRANSACTION = "ADD_CONTACT_TO_TRANSACTION";
@@ -70,12 +70,9 @@ export interface deleteContactAction {
 export type ContactTransactionPairActionTypes = 
 addContactToTransactionAction | removeContactFromTransactionAction | editAmountAction 
 
-<<<<<<< HEAD
 export type ContactActionTypes = loadContact | readAllContact | createContactAction | updateContactAction | updateContactByPropertyAction | deleteContactAction;
 
 //Add more as we expand our redux
-export type AppActions = ContactTransactionPairActionTypes | ContactActionTypes;
-=======
 export const CREATE_TRANSACTION = 'CREATE_TRANSACTION';
 export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
 export const UPDATE_TRANSACTION_BY_PROPERTY = 'UPDATE_TRANSACTION_BY_PROPERTY';
@@ -105,5 +102,4 @@ export type TransactionActionTypes = updateTransactionTypeAction | updateTransac
 
 
 //Add more as we expand our redux
-export type AppActions = ContactTransactionPairActionTypes | TransactionActionTypes
->>>>>>> 2f1d50d291636a28120da91c747dd277bc1436a1
+export type AppActions = ContactTransactionPairActionTypes | TransactionActionTypes | ContactActionTypes
