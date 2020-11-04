@@ -2,13 +2,22 @@ import * as React from 'react';
 import { StyleSheet, Image, KeyboardAvoidingView, Platform, Route } from 'react-native';
 import { Button, Icon, Avatar, Overlay } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
-import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { TextInput, ScrollView, State } from 'react-native-gesture-handler';
 import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
 import { PaymentBreakdown } from '../components/PaymentBreakdown';
 import * as lodash from 'lodash';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { updateTransactionType } from '../redux/transaction/transaction.actions';
+import { Transaction } from '../redux/types/types.transaction';
+import { update } from 'lodash';
+import {AppState} from '../redux/root-reducer';
+import { Contact } from '../redux/types/types.contact';
+import { addContactToTransaction, editAmount, removeContactFromTransaction } from '../redux/contactTransactionPair/contactTransactionPair.action';
+import { ContactTransactionPair } from '../redux/types/types.ContactTransactionPair';
 
 interface TransactionDetailsState {
     editedTransaction: TransactionSchema,
@@ -23,13 +32,24 @@ interface TransactionDetailsProps {
     route: Route
 }
 
+const actions = {
+    updateTransactionType: (transactionType: TRANSACTION_TYPE, transactionId: Transaction) : any => true,
+    
+}
+
+interface Props extends StateProps, DispatchProps {
+    updateTransactionType: typeof actions.updateTransactionType;
+    route: Route;
+    editedTransaction: Transaction[];
+}
+
 enum TRANSACTION_TYPE{
     STANDARD, MEAL, RECURRING
 }
 
 
-export default class TransactionDetailsScreen extends React.Component<TransactionDetailsProps, TransactionDetailsState>{
-    constructor (props: any, context: any){
+export class TransactionDetailsScreen extends React.Component<Props, TransactionDetailsState>{
+    constructor (props: Props, context: any){
         super(props, context);
         this.state = {
             editedTransaction : lodash.cloneDeep(this.props.route.params),
@@ -40,11 +60,11 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
         };
     };
 
-    updateTransactionType = (transactionType : TRANSACTION_TYPE) => {
-        this.setState({
-            transactionType
-        });
-    }
+    // updateTransactionType = (transactionType : TRANSACTION_TYPE) => {
+    //     this.setState({
+    //         transactionType
+    //     });
+    // }
 
     updateEditedTransaction = (propertyName: string, value: any) => {
         let editedTransaction : TransactionSchema = this.state.editedTransaction;
@@ -54,6 +74,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
             })
         console.log("Edited value: ", this.state.editedTransaction[propertyName]);
     }
+
 
     handleButtonClick = () => {
         this.setState({editable: !this.state.editable}, 
@@ -89,6 +110,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
     }
     
     render() {
+        const {updateTransactionType, currentTransaction, editedTransaction, addContactToTransaction, removeContactFromTransaction,editAmount, contactTransactionPair} = this.props;
         let displaySaveOverlay = <Overlay isVisible={this.state.displaySavePrompt} onBackdropPress={() => this.toggleOverlay()}>
             <View>
                 <Text>Save changes?</Text>
@@ -136,7 +158,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                     ]}
                     onValueChange={(value) => {
                         if (value !== null)
-                            this.updateTransactionType(value);
+                            updateTransactionType(value, currentTransaction[0]);
                     }}
 
                     placeholder={{label: 'Choose Transaction Mode', value: null}}
@@ -145,7 +167,7 @@ export default class TransactionDetailsScreen extends React.Component<Transactio
                         <KeyboardAvoidingView behavior={Platform.OS == 'android' ? 'height' : 'position'}>
                             <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="paymentDate" label="PAYMENT DEADLINE" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
                             <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="note" label="NOTE" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
-                            <PaymentBreakdown currentTransaction={this.state.editedTransaction} editable={this.state.editable} saveChanges={this.state.saveChanges}></PaymentBreakdown>
+                            <PaymentBreakdown contactTransactionPair = {contactTransactionPair} editAmount = {editAmount} removeContactFromTransaction = {removeContactFromTransaction} addContactToTransaction = {addContactToTransaction} currentTransaction={editedTransaction} editable={this.state.editable} saveChanges={this.state.saveChanges}></PaymentBreakdown>
                             <Text style={this.state.transactionType === TRANSACTION_TYPE.MEAL ? null : {display: 'none'}}>Tax: 12%, Tips: 5%</Text>
                             <Button title={"Recurring Details"} titleStyle={{color: 'black'}} containerStyle={this.state.transactionType === TRANSACTION_TYPE.RECURRING ? null : {display: 'none'}}/>
                             <FieldInputWithLabel currentTransaction={this.state.editedTransaction} propertyName="totalAmount" label="TOTAL AMOUNT" editable={this.state.editable} updateEditedTransaction={this.updateEditedTransaction}/>                            
@@ -224,3 +246,30 @@ const pickerStyle = StyleSheet.create({
     }
 })
 
+interface StateProps {
+    currentTransaction: Transaction[];
+    contactTransactionPair: ContactTransactionPair[];
+}
+
+const mapStateToProps = (state: AppState): StateProps => ({
+    currentTransaction: state.transactionReducer,
+    contactTransactionPair: state.contactTransactionPairReducer
+})
+
+interface DispatchProps {
+    updateTransactionType: typeof actions.updateTransactionType,
+    addContactToTransaction: Function,
+    removeContactFromTransaction: Function,
+    editAmount: Function    
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) : DispatchProps => ({
+    updateTransactionType: (transactionType, transactionId) => dispatch(updateTransactionType(transactionType, transactionId)),
+    addContactToTransaction: (contact: Contact, transaction: Transaction) => dispatch(addContactToTransaction(contact,transaction)),
+    removeContactFromTransaction: (contactId : string) => dispatch(removeContactFromTransaction(contactId)),
+    editAmount: (contactId: string, amount: number) => dispatch(editAmount(contactId,amount)),
+})
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionDetailsScreen)

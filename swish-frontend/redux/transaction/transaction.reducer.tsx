@@ -21,7 +21,7 @@ export const transactionReducer = (state = transaction_INITIAL_STATE, action: Ap
     switch(action.type) {
         case "UPDATE_TRANSACTION_TYPE":
             //find index that wants to change the transactionType
-            let index = state.findIndex(transaction => transaction.id === action.transactionId.id);
+            let index = state.findIndex(transaction => transaction.id === action.transaction.id);
 
         
             return [

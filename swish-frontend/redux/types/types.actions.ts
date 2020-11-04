@@ -82,7 +82,7 @@ export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
 export interface updateTransactionTypeAction {
     type: typeof UPDATE_TRANSACTION_TYPE,
     transactionType: TRANSACTION_TYPE,
-    transactionId: Transaction
+    transaction: Transaction
 }
 
 export interface updateTransactionAction {

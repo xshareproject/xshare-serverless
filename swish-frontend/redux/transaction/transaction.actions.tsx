@@ -1,10 +1,10 @@
 import { AppActions } from "../types/types.actions";
 import {Transaction, TRANSACTION_TYPE} from '../types/types.transaction';
 
-export const updateTransactionType = (transactionType: TRANSACTION_TYPE, transactionId: Transaction) : AppActions => ({
+export const updateTransactionType = (transactionType: TRANSACTION_TYPE, transaction: Transaction) : AppActions => ({
     type: "UPDATE_TRANSACTION_TYPE",
     transactionType,
-    transactionId
+    transaction
 })
 
 export const updateTransaction = (transaction: Transaction) : AppActions => ({

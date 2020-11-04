@@ -9,5 +9,5 @@ export interface ContactTransactionPair {
     transactionId: string,
     contactId: string,
     paymentStatus: PaymentStatus,
-    amountOwned: number
+    amountOwned: 0
 }
