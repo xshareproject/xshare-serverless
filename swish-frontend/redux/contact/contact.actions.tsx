@@ -1,5 +1,4 @@
 import { AppActions, READ_CONTACT_BY_ID, READ_CONTACT_BY_NAME, CREATE_CONTACT, UPDATE_CONTACT, UPDATE_CONTACT_BY_PROPERTY, DELETE_CONTACT } from "../types/types.actions"
-import { Contact } from "../types/types.Contact"
 import { ContactSchema } from "../../data_store/Contacts";
 
 export const createContact = (contact: ContactSchema): AppActions => ({

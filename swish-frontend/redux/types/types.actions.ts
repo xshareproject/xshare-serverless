@@ -7,15 +7,11 @@ import { ContactSchema } from '../../data_store/Contacts';
 export const ADD_CONTACT_TO_TRANSACTION = "ADD_CONTACT_TO_TRANSACTION";
 export const REMOVE_CONTACT_FROM_TRANSACTION = "REMOVE_CONTACT_FROM_TRANSACTION";
 export const EDIT_AMOUNT = "EDIT_AMOUNT";
+export const LOAD_CONTACT_TRANSACTION_PAIRS = "LOAD_CONTACT_TRANSACTION_PAIRS";
 
-export const READ_CONTACT_BY_ID = "READ_CONTACT_BY_ID";
-export const READ_CONTACT_BY_NAME = "READ_CONTACT_BY_NAME";
-export const READ_ALL_CONTACT = "READ_ALL_CONTACT";
-export const LOAD_CONTACT = "LOAD_CONTACT";
-export const CREATE_CONTACT = "CREATE_CONTACT";
-export const UPDATE_CONTACT = "UPDATE_CONTACT";
-export const UPDATE_CONTACT_BY_PROPERTY = "UPDATE_CONTACT_BY_PROPERTY";
-export const DELETE_CONTACT = "DELETE_CONTACT";
+export interface loadContactTransactionPairs {
+    type: typeof LOAD_CONTACT_TRANSACTION_PAIRS
+}
 
 export interface addContactToTransactionAction {
     type: typeof ADD_CONTACT_TO_TRANSACTION,
@@ -33,6 +29,15 @@ export interface editAmountAction {
     contactId: string,
     amount: number
 }
+
+export const READ_CONTACT_BY_ID = "READ_CONTACT_BY_ID";
+export const READ_CONTACT_BY_NAME = "READ_CONTACT_BY_NAME";
+export const READ_ALL_CONTACT = "READ_ALL_CONTACT";
+export const LOAD_CONTACT = "LOAD_CONTACT";
+export const CREATE_CONTACT = "CREATE_CONTACT";
+export const UPDATE_CONTACT = "UPDATE_CONTACT";
+export const UPDATE_CONTACT_BY_PROPERTY = "UPDATE_CONTACT_BY_PROPERTY";
+export const DELETE_CONTACT = "DELETE_CONTACT";
 
 export interface loadContact {
     type: typeof LOAD_CONTACT
@@ -78,6 +83,12 @@ export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION';
 export const UPDATE_TRANSACTION_BY_PROPERTY = 'UPDATE_TRANSACTION_BY_PROPERTY';
 export const UPDATE_TRANSACTION_TYPE = 'UPDATE_TRANSACTION_TYPE';
 export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
+export const LOAD_TRANSACTION = 'LOAD_TRANSACTION';
+
+export interface LOAD_TRANSACTION {
+    type: typeof LOAD_TRANSACTION
+}
+
 
 export interface updateTransactionTypeAction {
     type: typeof UPDATE_TRANSACTION_TYPE,

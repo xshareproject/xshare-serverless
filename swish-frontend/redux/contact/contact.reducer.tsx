@@ -11,7 +11,7 @@ export const contactReducer =
 (state = contact_INITIAL_STATE, action: ContactActionTypes)  : Contact[] => {
     switch (action.type){
         case "LOAD_CONTACT":
-            //TODO: Integrate with backend
+            //TODO: This is mockup data. Will eventually replace with backend integration
             const contactsDefault : Contact[] = [
                 {
                     id: "1",
