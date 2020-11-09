@@ -60,6 +60,19 @@ export const transactionReducer = (state = transaction_INITIAL_STATE, action: Ap
                     "groupId": "",
                     "transactionType": TRANSACTION_TYPE.STANDARD
                 },
+                {
+                    "id": "122atest-e4aa-4a57-a420-818fed3060f0",
+                    "lenderId": "33test-1578-4be5-87eb-e9211fedd90f",
+                    "transactionName": "Test",
+                    "totalAmount": 12.20,
+                    "note": "Test Transaction with different lenderId",
+                    "createdDate": "July 20th",
+                    "paymentDate": "August 20th",
+                    "recurring": false,
+                    "recurringId": "",
+                    "groupId": "",
+                    "transactionType": TRANSACTION_TYPE.STANDARD
+                },
             ];
             return transactionDefault;
         case UPDATE_TRANSACTION_TYPE:

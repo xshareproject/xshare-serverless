@@ -25,7 +25,7 @@ export default function TransactionCard(props: TransactionCardProps){
     if (contactList.length > 1){
         transactionContactName =  contactList[0].name + " & co";
     }
-
+    
     return (
         <TouchableHighlight onPress={ () => props.navigationCallback(props.transaction)}> 
             <React.Fragment>

@@ -29,23 +29,19 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     //getTransactionByLender should take in a value from data store and not hard-coded string
     //change in context here (or to be exact, the transactions object) does not trigger re-rendering of component
     return (
-      <TransactionsContext.Consumer>
-        {(transactions) => (
-          <View style={styles.container}>
-            <View style = {styles.topBar}>
-              <Text style={styles.welcomeText}>
-                <Text>Welcome </Text>
-                <Text style={{ fontWeight: 'bold' }}>Florence!</Text>
-              </Text>
-              <Text>THIS MONTH'S OWINGS</Text>
-              <Text style={{fontSize: 50}}>$150.00</Text> 
-            </View>
-            <View style = {styles.transactionView}>
-              <TransactionList style={styles.transactionList} transactions={transactions.getTransactionByLender('0wn3r1e-1578-4be5-87eb-e9211fedd90f')} navigationCallback={this.navigateToDetailCallback}></TransactionList>
-            </View>
-          </View> 
-        )}
-      </TransactionsContext.Consumer>
+        <View style={styles.container}>
+          <View style = {styles.topBar}>
+            <Text style={styles.welcomeText}>
+              <Text>Welcome </Text>
+              <Text style={{ fontWeight: 'bold' }}>Florence!</Text>
+            </Text>
+            <Text>THIS MONTH'S OWINGS</Text>
+            <Text style={{fontSize: 50}}>$150.00</Text> 
+          </View>
+          <View style = {styles.transactionView}>
+            <TransactionList style={styles.transactionList} userId={'0wn3r1e-1578-4be5-87eb-e9211fedd90f'} navigationCallback={this.navigateToDetailCallback}></TransactionList>
+          </View>
+        </View> 
     );
   }
 

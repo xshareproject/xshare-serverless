@@ -4,28 +4,31 @@ import {FlatList} from 'react-native';
 import { Text, View } from '../Themed';
 import TransactionCard from './TransactionCard';
 import {Transaction} from '../../redux/types/types.Transaction';
+import { connect } from 'react-redux';
+import {AppState} from '../../redux/root-reducer';
 
 interface TransactionListState {
     transactions : Transaction[],
 }
 
 export interface TransactionListProps extends React.ComponentProps<any>{
-    transactions : Transaction[],
-    navigationCallback : (transaction : Transaction) => void
+    userId: string,
+    navigationCallback : (transaction : Transaction) => void,
+    transactionList: Transaction[]
 }
 
-export default class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
+class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
     constructor(props : TransactionListProps){
         super(props);
         this.state = {
             transactions: []
-        }
+        };
     }
 
     //load in transaction data on component creation
     componentDidMount(){
         this.setState({
-            transactions: this.props.transactions
+            transactions: this.props.transactionList
         });
     }
 
@@ -52,6 +55,15 @@ export default class TransactionList extends React.Component<TransactionListProp
         );
     }
 }
+
+interface StateProps {
+    transactionList: Transaction[]
+}
+  
+const mapStateToProps = (state: AppState, ownProps : {userId: string, navigationCallback : any}): StateProps => {
+    let transactionList = state.transactionReducer.filter((transaction : Transaction) => {return transaction.lenderId === ownProps.userId});
+    return {transactionList};
+};
  
 const styles = StyleSheet.create({
     container: {
@@ -60,3 +72,4 @@ const styles = StyleSheet.create({
     }
 });
 
+export default connect(mapStateToProps, null)(TransactionList);
