@@ -1,6 +1,6 @@
 import { AppActions, ADD_CONTACT_TO_TRANSACTION, REMOVE_CONTACT_FROM_TRANSACTION, EDIT_AMOUNT} from "../types/types.actions"
-import { Contact } from "../types/types.contact"
-import {Transaction} from '../types/types.transaction';
+import { Contact } from "../types/types.Contact";
+import {Transaction} from '../types/types.Transaction';
 
 
 export const addContactToTransaction = (contact : Contact, transaction: Transaction): AppActions => ({

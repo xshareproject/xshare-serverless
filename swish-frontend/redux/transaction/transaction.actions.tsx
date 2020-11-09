@@ -1,5 +1,5 @@
 import { AppActions } from "../types/types.actions";
-import {Transaction, TRANSACTION_TYPE} from '../types/types.transaction';
+import {Transaction, TRANSACTION_TYPE} from '../types/types.Transaction';
 
 export const updateTransactionType = (transactionType: TRANSACTION_TYPE, transaction: Transaction) : AppActions => ({
     type: "UPDATE_TRANSACTION_TYPE",

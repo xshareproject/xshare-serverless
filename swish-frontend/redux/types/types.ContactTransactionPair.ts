@@ -4,10 +4,10 @@ export enum PaymentStatus {
     Paid,
 }
 
-export interface ContactTransactionPair {
+export interface ContactTransactionPairs {
     id: string,
     transactionId: string,
     contactId: string,
     paymentStatus: PaymentStatus,
-    amountOwned: 0
+    amountOwned: number
 }

@@ -3,17 +3,15 @@ import { StyleSheet } from 'react-native';
 import {FlatList} from 'react-native';
 import { Text, View } from '../Themed';
 import TransactionCard from './TransactionCard';
-import {TransactionSchema} from '../../data_store/Transactions';
-
+import {Transaction} from '../../redux/types/types.Transaction';
 
 interface TransactionListState {
-    transactions : TransactionSchema[],
-    
+    transactions : Transaction[],
 }
 
 export interface TransactionListProps extends React.ComponentProps<any>{
-    transactions : TransactionSchema[],
-    navigationCallback : (transaction : TransactionSchema) => void
+    transactions : Transaction[],
+    navigationCallback : (transaction : Transaction) => void
 }
 
 export default class TransactionList extends React.Component<TransactionListProps, TransactionListState>{

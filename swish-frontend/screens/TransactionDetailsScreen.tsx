@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, Image, KeyboardAvoidingView, Platform, Route } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, Platform, Route } from 'react-native';
 import { Button, Icon, Avatar, Overlay } from 'react-native-elements';
 import { Text, View } from '../components/Themed';
-import { TextInput, ScrollView, State } from 'react-native-gesture-handler';
-import {TransactionsContext, TransactionSchema, Transactions} from '../data_store/Transactions';
+import { TextInput, ScrollView} from 'react-native-gesture-handler';
 import { NavigationProp} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import {APP_PRIMARY_COLOR} from '../assets/theme';
@@ -11,16 +10,15 @@ import { PaymentBreakdown } from '../components/PaymentBreakdown';
 import * as lodash from 'lodash';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { updateTransactionType } from '../redux/transaction/transaction.actions';
-import { Transaction } from '../redux/types/types.transaction';
-import { update } from 'lodash';
-import {AppState} from '../redux/root-reducer';
+import { Transaction } from '../redux/types/types.Transaction';
 import { Contact } from '../redux/types/types.contact';
+import { ContactTransactionPairs } from '../redux/types/types.ContactTransactionPair';
+import { updateTransactionType } from '../redux/transaction/transaction.actions';
 import { addContactToTransaction, editAmount, removeContactFromTransaction } from '../redux/contactTransactionPair/contactTransactionPair.action';
-import { ContactTransactionPair } from '../redux/types/types.ContactTransactionPair';
+import {AppState} from '../redux/root-reducer';
 
 interface TransactionDetailsState {
-    editedTransaction: TransactionSchema,
+    editedTransaction: Transaction,
     editable: boolean,
     displaySavePrompt: boolean,
     saveChanges: boolean,
@@ -34,7 +32,6 @@ interface TransactionDetailsProps {
 
 const actions = {
     updateTransactionType: (transactionType: TRANSACTION_TYPE, transactionId: Transaction) : any => true,
-    
 }
 
 interface Props extends StateProps, DispatchProps {
@@ -46,7 +43,6 @@ interface Props extends StateProps, DispatchProps {
 enum TRANSACTION_TYPE{
     STANDARD, MEAL, RECURRING
 }
-
 
 export class TransactionDetailsScreen extends React.Component<Props, TransactionDetailsState>{
     constructor (props: Props, context: any){
@@ -67,7 +63,7 @@ export class TransactionDetailsScreen extends React.Component<Props, Transaction
     // }
 
     updateEditedTransaction = (propertyName: string, value: any) => {
-        let editedTransaction : TransactionSchema = this.state.editedTransaction;
+        let editedTransaction : Transaction = this.state.editedTransaction;
         editedTransaction[propertyName] = value;
         this.setState({
                 editedTransaction
@@ -180,7 +176,7 @@ export class TransactionDetailsScreen extends React.Component<Props, Transaction
 }
 
 interface TextInputWithLabelProps{
-    currentTransaction: TransactionSchema,
+    currentTransaction: Transaction,
     propertyName: string,
     label: string,
     editable: boolean,
@@ -204,7 +200,6 @@ function FieldInputWithLabel(props : TextInputWithLabelProps){
     );
 }
 
-TransactionDetailsScreen.contextType = TransactionsContext;
 
 const styles = StyleSheet.create({
     topBar: {
@@ -248,9 +243,9 @@ const pickerStyle = StyleSheet.create({
 
 interface StateProps {
     currentTransaction: Transaction[];
-    contactTransactionPair: ContactTransactionPair[];
+    contactTransactionPair: ContactTransactionPairs[];
 }
-
+//TODO: Add ownProps to filter out state of Transaction and ContactTransactionPairs store
 const mapStateToProps = (state: AppState): StateProps => ({
     currentTransaction: state.transactionReducer,
     contactTransactionPair: state.contactTransactionPairReducer

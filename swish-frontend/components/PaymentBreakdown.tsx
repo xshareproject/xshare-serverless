@@ -2,16 +2,15 @@ import * as React from 'react';
 import { SearchBar, ListItem, Button, Icon, Overlay } from 'react-native-elements';
 import {View} from './Themed';
 import {StyleSheet, Text, FlatList} from 'react-native';
-import { ContactSchema, Contacts, ContactsContext, TransactionContactPair, PaymentStatus } from '../data_store/Contacts';
-import { TransactionSchema } from '../data_store/Transactions';
+import { ContactSchema, Contacts, ContactsContext, TransactionContactPair} from '../data_store/Contacts';
 import { State, TextInput } from 'react-native-gesture-handler';
 import { connect} from 'react-redux';
-import { ContactTransactionPair } from '../redux/types/types.ContactTransactionPair';
+import { ContactTransactionPairs, PaymentStatus } from '../redux/types/types.ContactTransactionPair';
 import {AppState} from '../redux/root-reducer';
 import {Dispatch} from 'redux';
 import {Contact} from '../redux/types/types.Contact';
 import {AppActions} from '../redux/types/types.actions';
-import { Transaction } from '../redux/types/types.transaction';
+import { Transaction } from '../redux/types/types.Transaction';
 import { addContactToTransaction, editAmount, removeContactFromTransaction } from '../redux/contactTransactionPair/contactTransactionPair.action';
 
 
@@ -227,7 +226,7 @@ PaymentBreakdown.contextType = ContactsContext;
 
 interface StateProps {
     currentTransaction: Transaction[];
-    contactTransactionPair: ContactTransactionPair[];
+    contactTransactionPair: ContactTransactionPairs[];
 }
 
 

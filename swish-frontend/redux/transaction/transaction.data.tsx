@@ -1,4 +1,4 @@
-import { Transaction, TRANSACTION_TYPE } from "../types/types.transaction";
+import { Transaction, TRANSACTION_TYPE } from "../types/types.Transaction";
 
 export var transactionData : Transaction[] = [
     {
