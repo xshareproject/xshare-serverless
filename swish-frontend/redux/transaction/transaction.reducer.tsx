@@ -1,5 +1,6 @@
 import { CREATE_TRANSACTION, LOAD_TRANSACTIONS, UPDATE_TRANSACTION, UPDATE_TRANSACTION_BY_PROPERTY, UPDATE_TRANSACTION_TYPE, DELETE_TRANSACTION, AppActions } from '../types/types.actions';
 import {Transaction, TRANSACTION_TYPE} from '../types/types.Transaction';
+import * as lodash from 'lodash';
 
 const transaction_INITIAL_STATE : Transaction[] = [{
     id: "",
@@ -91,13 +92,15 @@ export const transactionReducer = (state = transaction_INITIAL_STATE, action: Ap
                 ...state.slice(index+1),
             ]
         case UPDATE_TRANSACTION:
-            let indexTransaction = state.findIndex(transaction => transaction.id === action.transaction.id);
-            state[indexTransaction] = action.transaction;
+            let transactions = lodash.cloneDeep(state);
+            let transactionId = action.transaction.id;
+            let indexTransaction = state.findIndex( (transaction : Transaction) => {return transaction.id == transactionId});
+            transactions[indexTransaction] = action.transaction;
             return [
-                ...state
-            ]
+                ...transactions,
+            ];
         case UPDATE_TRANSACTION_BY_PROPERTY:
-            let indexProperty = state.findIndex(transaction => transaction.id === action.id)
+            let indexProperty = state.findIndex(transaction => transaction.id == action.id)
             
             return [
                 ...state.slice(0,indexProperty),

@@ -1,4 +1,3 @@
-import { ContactSchema } from "../../data_store/Contacts";
 import harold from '../../assets/images/profile_test.webp';
 
 import {ContactActionTypes, READ_ALL_CONTACTS, LOAD_CONTACTS, CREATE_CONTACT, UPDATE_CONTACT, UPDATE_CONTACT_BY_PROPERTY, DELETE_CONTACT} from '../types/types.actions';
@@ -11,7 +10,6 @@ export const contactReducer =
 (state = contact_INITIAL_STATE, action: ContactActionTypes)  : Contact[] => {
     switch (action.type){
         case LOAD_CONTACTS:
-            //TODO: This is mockup data. Will eventually be replaced with backend integration
             const contactsDefault : Contact[] = [
                 {
                     id: "1",
@@ -44,7 +42,8 @@ export const contactReducer =
                     profilePicture: harold
                 }
             ];
-            return contactsDefault;
+            state = contactsDefault;
+            return state;
         case READ_ALL_CONTACTS:
             return state;
         case CREATE_CONTACT:

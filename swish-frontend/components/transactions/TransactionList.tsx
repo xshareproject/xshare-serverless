@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import {FlatList} from 'react-native';
-import { Text, View } from '../Themed';
+import { View } from '../Themed';
 import TransactionCard from './TransactionCard';
 import {Transaction} from '../../redux/types/types.Transaction';
 import { connect } from 'react-redux';
@@ -11,24 +11,28 @@ interface TransactionListState {
     transactions : Transaction[],
 }
 
+interface StateProps {
+    transactions: Transaction[],
+}
+
 export interface TransactionListProps extends React.ComponentProps<any>{
     userId: string,
     navigationCallback : (transaction : Transaction) => void,
-    transactionList: Transaction[]
+    transactions: Transaction[],
 }
 
 class TransactionList extends React.Component<TransactionListProps, TransactionListState>{
     constructor(props : TransactionListProps){
         super(props);
         this.state = {
-            transactions: []
+            transactions: [],
         };
     }
 
     //load in transaction data on component creation
     componentDidMount(){
         this.setState({
-            transactions: this.props.transactionList
+            transactions: this.props.transactions
         });
     }
 
@@ -44,7 +48,7 @@ class TransactionList extends React.Component<TransactionListProps, TransactionL
     }
 
     render(){
-        return (
+            return (
             <View style={styles.container}>
                 <FlatList 
                     data={this.state.transactions} 
@@ -55,14 +59,10 @@ class TransactionList extends React.Component<TransactionListProps, TransactionL
         );
     }
 }
-
-interface StateProps {
-    transactionList: Transaction[]
-}
   
 const mapStateToProps = (state: AppState, ownProps : {userId: string, navigationCallback : any}): StateProps => {
-    let transactionList = state.transactionReducer.filter((transaction : Transaction) => {return transaction.lenderId === ownProps.userId});
-    return {transactionList};
+    let transactions = state.transactionReducer.filter((transaction : Transaction) => {return transaction.lenderId === ownProps.userId});
+    return {transactions: transactions};
 };
  
 const styles = StyleSheet.create({

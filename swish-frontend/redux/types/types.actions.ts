@@ -1,14 +1,16 @@
-
-import { removeContactFromTransaction } from '../contactTransactionPair/contactTransactionPair.action'
 import {Transaction, TRANSACTION_TYPE} from './types.Transaction';
 import {Contact} from './types.contact';
+import { ContactTransactionPair } from './types.ContactTransactionPair';
 
 export const ADD_CONTACT_TO_TRANSACTION = "ADD_CONTACT_TO_TRANSACTION";
-export const REMOVE_CONTACT_FROM_TRANSACTION = "REMOVE_CONTACT_FROM_TRANSACTION";
+export const ADD_CONTACTS_BY_TRANSACTION_ID = "ADD_CONTACTS_BY_TRANSACTION_ID";
+export const ADD_MULTIPLE_TRANSACTION_PAIRS = "ADD_MULTIPLE_TRANSACTION_PAIRS";
 export const EDIT_AMOUNT = "EDIT_AMOUNT";
 export const LOAD_CONTACT_TRANSACTION_PAIRS = "LOAD_CONTACT_TRANSACTION_PAIRS";
+export const REMOVE_CONTACT_FROM_TRANSACTION = "REMOVE_CONTACT_FROM_TRANSACTION";
+export const REMOVE_CONTACTS_BY_TRANSACTION_ID = "REMOVE_CONTACTS_BY_TRANSACTION_ID";
 
-export interface loadContactTransactionPairs {
+export interface loadContactTransactionPairsAction {
     type: typeof LOAD_CONTACT_TRANSACTION_PAIRS
 }
 
@@ -18,9 +20,20 @@ export interface addContactToTransactionAction {
     transaction: Transaction
 }
 
+export interface addContactsByTransactionIdAction {
+    type: typeof ADD_CONTACTS_BY_TRANSACTION_ID,
+    transactionId: string,
+    contactTransactionPairArr: ContactTransactionPair[] 
+}
+
 export interface removeContactFromTransactionAction {
     type: typeof REMOVE_CONTACT_FROM_TRANSACTION,
     contactId: string
+}
+
+export interface removeContactsByTransactionIdAction {
+    type: typeof REMOVE_CONTACTS_BY_TRANSACTION_ID,
+    transactionId: string
 }
 
 export interface editAmountAction {
@@ -29,7 +42,12 @@ export interface editAmountAction {
     amount: number
 }
 
-export type ContactTransactionPairActionTypes = loadContactTransactionPairs | addContactToTransactionAction | removeContactFromTransactionAction | editAmountAction;
+export interface addMultipleTransactionPairs {
+    type: typeof ADD_MULTIPLE_TRANSACTION_PAIRS,
+    contactTransactionPairs: ContactTransactionPair[]
+}
+
+export type ContactTransactionPairActionTypes = loadContactTransactionPairsAction | addContactToTransactionAction | addContactsByTransactionIdAction | addMultipleTransactionPairs | removeContactFromTransactionAction | removeContactsByTransactionIdAction |editAmountAction;
 
 export const READ_CONTACT_BY_ID = "READ_CONTACT_BY_ID";
 export const READ_CONTACT_BY_NAME = "READ_CONTACT_BY_NAME";
@@ -40,11 +58,11 @@ export const UPDATE_CONTACT = "UPDATE_CONTACT";
 export const UPDATE_CONTACT_BY_PROPERTY = "UPDATE_CONTACT_BY_PROPERTY";
 export const DELETE_CONTACT = "DELETE_CONTACT";
 
-export interface loadContacts {
+export interface loadContactsAction {
     type: typeof LOAD_CONTACTS
 }
 
-export interface readAllContact {
+export interface readAllContactsAction {
     type: typeof READ_ALL_CONTACTS
 }
 
@@ -71,7 +89,8 @@ export interface deleteContactAction {
     contactId: string
 }
 
-export type ContactActionTypes = loadContacts | readAllContact | createContactAction | updateContactAction | updateContactByPropertyAction | deleteContactAction;
+
+export type ContactActionTypes = loadContactsAction | readAllContactsAction | createContactAction | updateContactAction | updateContactByPropertyAction | deleteContactAction | removeContactsByTransactionIdAction;
 
 //Add more as we expand our redux
 export const CREATE_TRANSACTION = 'CREATE_TRANSACTION';
@@ -81,7 +100,7 @@ export const UPDATE_TRANSACTION_TYPE = 'UPDATE_TRANSACTION_TYPE';
 export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
 export const LOAD_TRANSACTIONS = 'LOAD_TRANSACTIONS';
 
-export interface loadTransactions {
+export interface loadTransactionsAction {
     type: typeof LOAD_TRANSACTIONS
 }
 
@@ -104,7 +123,7 @@ export interface updateTransactionByPropertyAction {
     value: any
 }
 
-export type TransactionActionTypes = loadTransactions | updateTransactionTypeAction | updateTransactionAction | updateTransactionByPropertyAction;
+export type TransactionActionTypes = loadTransactionsAction | updateTransactionTypeAction | updateTransactionAction | updateTransactionByPropertyAction;
 
 
 

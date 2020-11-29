@@ -2,8 +2,8 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import TransactionList from '../components/transactions/TransactionList';
-import { TransactionsContext, TransactionSchema} from '../data_store/Transactions';
 import { NavigationProp } from '@react-navigation/native';
+import { Transaction } from '../redux/types/types.Transaction';
 
 
 //TODO: TransactionProps should be extending from a Props with navigation object
@@ -45,7 +45,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     );
   }
 
-  navigateToDetailCallback = (transaction : TransactionSchema) => {
+  navigateToDetailCallback = (transaction : Transaction) => {
     this.props.navigation.navigate('Details', transaction);
   }
 }
