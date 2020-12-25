@@ -19,12 +19,6 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     super(props);
   }  
 
-  componentDidMount(){
-    this.props.navigation.addListener('focus', () => {
-      console.log("Overview Screen Mounted ");
-    });
-  }
-
   render(){
     //getTransactionByLender should take in a value from data store and not hard-coded string
     //change in context here (or to be exact, the transactions object) does not trigger re-rendering of component

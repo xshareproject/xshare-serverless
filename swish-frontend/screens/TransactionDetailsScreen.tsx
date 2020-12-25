@@ -13,6 +13,7 @@ import { Dispatch } from 'redux';
 import { Transaction } from '../redux/types/types.Transaction';
 import { updateTransaction, updateTransactionType } from '../redux/transaction/transaction.actions';
 import { UPDATE_TRANSACTION } from '../redux/types/types.actions';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface DispatchProps {
     updateTransaction: Function,
@@ -184,20 +185,45 @@ interface TextInputWithLabelProps{
 }
 
 function FieldInputWithLabel(props : TextInputWithLabelProps){
-    var defaultValue = props.currentTransaction[props.propertyName];
+    var fieldValue = props.currentTransaction[props.propertyName];
     var label : string = props.label;
     var styling = props.editable ? styles.inputFieldEditable : styles.inputField;
-    return (
-        <View>
-            <Text style={{borderBottomWidth: 1}}>{label}</Text>
-            <TextInput style={styling} 
-            onChangeText={(text) => 
-                props.updateEditedTransaction(props.propertyName, text)}
-            editable={props.editable}>
-            {defaultValue}  
-            </TextInput>
-        </View> 
-    );
+    const [displayDatePicker, setDisplayDatePicker] = React.useState(false);
+
+    if (props.propertyName === "paymentDate"){
+            const options = {year: 'numeric', month: 'long', day: 'numeric' };
+            return (
+            <View>
+                <Text style={{borderBottomWidth: 1}}>{label}</Text>
+                <Text style={styling} 
+                onPress={() => {if (props.editable) setDisplayDatePicker(true); }}>
+                {props.currentTransaction[props.propertyName]}  
+                </Text>
+                {displayDatePicker &&  
+                <DateTimePicker
+                    value={new Date(props.currentTransaction[props.propertyName])}
+                    mode={'date'}
+                    display="default"
+                    onChange={(event, date) => {
+                        props.updateEditedTransaction(props.propertyName, date?.toLocaleDateString(undefined, options)); 
+                        setDisplayDatePicker(false);}}  
+                />}
+            </View> 
+        );
+    }
+    else{
+        return (
+            <View>
+                <Text style={{borderBottomWidth: 1}}>{label}</Text>
+                <TextInput style={styling} 
+                onChangeText={(text) => 
+                    props.updateEditedTransaction(props.propertyName, text)}
+                editable={props.editable}>
+                {fieldValue}  
+                </TextInput>
+            </View> 
+        );
+    }
 }
 
 

@@ -25,8 +25,15 @@ class TransactionList extends React.Component<TransactionListProps, TransactionL
     constructor(props : TransactionListProps){
         super(props);
         this.state = {
-            transactions: [],
+            transactions: this.props.transactions,
         };
+    }
+    
+    //this might ignore changes in contacts
+    static getDerivedStateFromProps = (nextProps : TransactionListProps, prevState : TransactionListState) => {
+        if(nextProps.transactions !== prevState.transactions)
+            return ({transactions: nextProps.transactions});
+        return null;
     }
 
     //load in transaction data on component creation
@@ -46,27 +53,28 @@ class TransactionList extends React.Component<TransactionListProps, TransactionL
             />
         );
     }
-
+    
     render(){
+            // console.log("List: ", this.state.transactions);
             return (
             <View style={styles.container}>
                 <FlatList 
                     data={this.state.transactions} 
                     renderItem={this.renderItem}
-                    keyExtractor={(item) => item.id}>
+                    keyExtractor={(item) => JSON.stringify(item)}>
                 </FlatList>
             </View>
-        );
+           );
     }
 }
-  
+ 
 const mapStateToProps = (state: AppState, ownProps : {userId: string, navigationCallback : any}): StateProps => {
     let transactions = state.transactionReducer.filter((transaction : Transaction) => {return transaction.lenderId === ownProps.userId});
     return {transactions: transactions};
 };
  
 const styles = StyleSheet.create({
-    container: {
+    container: {    
         paddingTop: 10, 
         borderRadius: 10
     }
