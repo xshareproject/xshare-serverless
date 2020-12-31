@@ -4,6 +4,8 @@ import { Text, View } from '../components/Themed';
 import TransactionList from '../components/transactions/TransactionList';
 import { NavigationProp } from '@react-navigation/native';
 import { Transaction } from '../redux/types/types.Transaction';
+import { APP_PRIMARY_COLOR, APP_GRADIENT_COLOR } from '../assets/theme';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 //TODO: TransactionProps should be extending from a Props with navigation object
@@ -23,7 +25,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
     //getTransactionByLender should take in a value from data store and not hard-coded string
     //change in context here (or to be exact, the transactions object) does not trigger re-rendering of component
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
           <View style = {styles.topBar}>
             <Text style={styles.welcomeText}>
               <Text>Welcome </Text>
@@ -47,7 +49,7 @@ export default class TransactionsOverviewScreen extends React.Component<Transact
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#61daaa'
+    backgroundColor: APP_PRIMARY_COLOR
   },
   topBar: {
     flex: .7,
