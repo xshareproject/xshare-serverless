@@ -1,5 +1,4 @@
 Project Dependancies
-=============== 
 	- Backend
 		○ ExpressJS
 		○ PostgreSQL
@@ -12,3 +11,4 @@ Development
 	- Backend:
 		○ cd server && npm run dev 
 		○ Or npm run backend
+=======
