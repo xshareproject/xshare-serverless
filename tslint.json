@@ -1,0 +1,43 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "max-line-length": [ true, 999 ],
+        "trailing-comma": [ true ],
+        "no-console": [ false ],
+        "no-magic-numbers": [ false ],
+        "await-promise": [ true ],
+        "curly": [ true ],
+        "typedef": [ true ],
+        "no-async-without-await": [ true ],
+        "no-empty": [ true ],
+        "no-floating-promises": [ true ],
+        "no-implicit-dependencies": [ true ],
+        "only-arrow-functions": [ true ],
+        "no-return-await": [ true ],
+        "no-switch-case-fall-through": [ true ],
+        "no-tautology-expression": [ true ],
+        "no-unused-variable": [ true ],
+        "prefer-const": [ true ],
+        "class-name": [ true ],
+        "increment-decrement": [ true ],
+        "ordered-imports": [ false ],
+        "prefer-method-signature": [ true ],
+        "unnecessary-else": [ true ],
+        "variable-name": [ true ],
+        "align": [ true ],
+        "arrow-parens": [ true ],
+        "indent": [ true ],
+        "no-irregular-whitespace": [ true ],
+        "no-trailing-whitespace": [ true ],
+        "quotemark": [ true, "double" ],
+        "semicolon": [ true ],
+        "whitespace": [ true ],
+        "eofline": [ false ],
+        "object-literal-sort-keys": [ false ]
+    },
+    "rulesDirectory": []
+}
