@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
-const dbConnector = require('./config/database');
+const sequelize = require('./config/database').sequelize;
 const cors = require('cors');
 const fs = require('fs');
 const https = require('https');
@@ -22,9 +22,9 @@ app.get('/', (req, res) => res.send("Hello Swish"));
 app.use('/api/users', jsonParser, require('./routes/users'));
 app.use('/api/contacts', jsonParser, require('./routes/contacts'));
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, console.log(`Server started on port ${PORT}`));
 
-dbConnector.authenticate()
+sequelize.authenticate()
 .then(() => console.log('Connection has been established successfully.'))
 .catch((err) => console.error('Unable to connect to the database:', err));
