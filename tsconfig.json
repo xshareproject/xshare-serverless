@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-      "outDir": "./built",
-      "allowJs": true,
-      "target": "es6"
+        "outDir": "./built",
+        "allowJs": true,
+        "target": "es6"
     },
     "typeRoots": [
       "../node_modules/@types/"
     ],
-    "include": ["./server/**/*"]
+    "include": ["./"]
 }
