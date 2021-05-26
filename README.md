@@ -11,8 +11,6 @@ npm install
 ```
 
 Development
-===============
-- install Prettier vscode extension
 - Run npm install on root folder 
 - To build docker backend image: Run docker build -t xshare-backend:latest . (the . is required, specifying current directory)
 - To run container: docker-compose up
