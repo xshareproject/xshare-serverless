@@ -1,33 +1,37 @@
 {
-  "name": "xshare-api",
+  "name": "xshare-serverless",
   "version": "1.0.0",
   "description": "",
-  "main": "out/index.js",
+  "main": "./src/app.js",
   "scripts": {
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.tsx",
+    "dev": "concurrently \"tsc -w\" \"nodemon ./src/app.tsx\"",
     "prebuild": "npm install && tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
-    "prestart": "npm run build",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\""
+    "prestart": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xshareproject/xshare-api.git"
+    "url": "git+https://github.com/xshareproject/xshare-serverless.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/xshareproject/xshare-api/issues"
+    "url": "https://github.com/xshareproject/xshare-serverless/issues"
   },
-  "homepage": "https://github.com/xshareproject/xshare-api#readme",
+  "homepage": "https://github.com/xshareproject/xshare-serverless#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "concurrently": "^6.0.0",
     "config": "^3.3.6",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
+    "node-postgres": "^0.6.2",
+    "pg": "^8.2.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.2",
     "tslint": "^6.1.3",
     "typescript": "^4.2.3"
   },
